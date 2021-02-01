@@ -18,6 +18,8 @@ const retrieveAssessmentResults = async function retrieveAssessmentResults(platf
     const nowsecureEndpoint = `/${config.NOWSECURE.ENDPOINTS.APPLICATION}/${platform}/${appPackage}/${config.NOWSECURE.ENDPOINTS.ASSESSMENT}/${task}/${config.NOWSECURE.ENDPOINTS.RESULTS}`;
     const response = await rest.GETRequestWrapper(retrieveAssessmentResults.name, config.NOWSECURE.URI, config.NOWSECURE.ACCESS_TOKEN, nowsecureEndpoint, true);
 
+    assert(response.statusCode === 200, `Assessment's results cannot be retrieved for platform ${platform}: ${response.body.message}`);
+
     return response.body;
 }
 

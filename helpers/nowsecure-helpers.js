@@ -1,6 +1,6 @@
 const assert = require('assert');
 
-const rest = require('./rest-helpers');
+const rest = require('./rest-helper');
 const config = require('./../config/config');
 
 const retrieveAssessment = async function retrieveAssessment(platform) {

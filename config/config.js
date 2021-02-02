@@ -1,3 +1,5 @@
+const core = require('@actions/core');
+
 const NOWSECURE = {
     URI: 'lab-api.nowsecure.com',
     ENDPOINTS: {
@@ -12,8 +14,8 @@ const REST = {
 };
 const APPLICATION = {
     PACKAGES: {
-        IOS: 'co.uk.camelot',
-        ANDROID: 'uk.co.theofficialnationallotteryapp.android.play'
+        IOS: process.env.IOS_PACKAGE || core.getInput('IOS_PACKAGE'),
+        ANDROID: process.env.ANDROID_PACKAGE || core.getInput('ANDROID_PACKAGE')
     }
 }
 

@@ -7,15 +7,15 @@ const NOWSECURE = {
         APPLICATION: 'app',
         RESULTS: 'results',
     },
-    ACCESS_TOKEN: process.env.NOWSECURE_ACCESS_TOKEN
+    ACCESS_TOKEN: core.getInput('NOWSECURE_ACCESS_TOKEN') || process.env.NOWSECURE_ACCESS_TOKEN
 };
 const REST = {
     HEADER_ACCEPT_APPLICATION_JSON: 'application/json'
 };
 const APPLICATION = {
     PACKAGES: {
-        IOS: process.env.IOS_PACKAGE || core.getInput('IOS_PACKAGE'),
-        ANDROID: process.env.ANDROID_PACKAGE || core.getInput('ANDROID_PACKAGE')
+        IOS: core.getInput('IOS_PACKAGE') || process.env.IOS_PACKAGE,
+        ANDROID: core.getInput('ANDROID_PACKAGE') || process.env.ANDROID_PACKAGE
     }
 }
 

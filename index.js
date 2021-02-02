@@ -1,7 +1,8 @@
 const core = require('@actions/core');
+const { v4 } = require('uuid');
 
 const nowsecure = require('./helpers/nowsecure-helpers');
-const platforms = process.env.PLATFORMS.split(',') || core.getInput('PLATFORMS').split(',');
+const platforms = core.getInput('PLATFORMS').split(',') || process.env.PLATFORMS.split(',');
 
 const startAnalysis = async () => {
     let assessments = [];
@@ -57,17 +58,20 @@ const startAnalysis = async () => {
     filteredReportedIssues.forEach(filteredIssue => {
         filteredIssue.forEach(issue => {
             let singleIssueData = {
-                key: issue.key,
-                title: issue.title,
-                description: issue.description,
-                recommendation: issue.recommendation,
-                severity: issue.severity,
+                [v4().toString()]: {
+                    key: issue.key,
+                    title: issue.title,
+                    description: issue.description,
+                    recommendation: issue.recommendation,
+                    severity: issue.severity,
+                }
             };
             reportOutput.push(singleIssueData);
         });
     });
 
     // output the constructed object
+    console.log(reportOutput);
     core.setOutput('nowsecureReportData', reportOutput);
 };
 

@@ -1,5 +1,19 @@
 name: "Nowsecure Report Parser"
 description: "Reformat the output from Nowsecure in order to be used in the Jira Server Integration Action"
+inputs:
+  PLATFORMS:
+    description: "An array of the platforms the Nowsecure report has run against"
+    required: true
+  NOWSECURE_ACCESS_TOKEN:
+    description: "The access token retrieved from Nowsecure in order for the action to be able to interact with Nowsecure's API"
+    required: true
+  # at least one of the following needs to be included
+  IOS_PACKAGE:
+    description: "The name of the app's package for the iOS platform"
+    required: false
+  ANDROID_PACKAGE:
+    description: "The name of the app's package for the Android platform"
+    required: false
 outputs:
   NOWSECURE_DATA:
     description: "JSON style object with specific data from the Nowsecure report"

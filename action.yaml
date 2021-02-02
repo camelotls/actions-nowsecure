@@ -1,0 +1,8 @@
+name: "Nowsecure Report Parser"
+description: "Reformat the output from Nowsecure in order to be used in the Jira Server Integration Action"
+outputs:
+  NOWSECURE_DATA:
+    description: "JSON style object with specific data from the Nowsecure report"
+runs:
+  using: "docker"
+  image: "Dockerfile"

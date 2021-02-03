@@ -2,7 +2,7 @@ const core = require('@actions/core');
 const { v4 } = require('uuid');
 
 const nowsecure = require('./helpers/nowsecure-helpers');
-const platforms = core.getInput('PLATFORMS').split(',') || process.env.PLATFORMS.split(',');
+const platforms = core.getInput('PLATFORMS') || process.env.PLATFORMS.split(',');
 
 const startAnalysis = async () => {
     let assessments = [];
@@ -54,7 +54,7 @@ const startAnalysis = async () => {
     });
 
     // construct the object acting as an input for the Jira Server Integration Action
-    let reportOutput = [];
+    let reportOutput = {};
     filteredReportedIssues.forEach(filteredIssue => {
         filteredIssue.forEach(issue => {
             let singleIssueData = {
@@ -66,12 +66,11 @@ const startAnalysis = async () => {
                     severity: issue.severity,
                 }
             };
-            reportOutput.push(singleIssueData);
+            Object.assign(reportOutput, singleIssueData);
         });
     });
 
     // output the constructed object
-    console.log(reportOutput);
     core.setOutput('nowsecureReportData', reportOutput);
 };
 

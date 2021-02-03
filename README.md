@@ -20,15 +20,23 @@ This repo takes advantage of [Nowsecure's REST API ](https://docs.nowsecure.com/
 The action outputs a array of JSON objects named `NOWSECURE_DATA` which has the following format for example:
 
 ```
-[{ '17f53cbf-f744-482c-9437-ee5692716198':
-      { key: 'leaked_logcat_data_build_fingerprint',
-        title: 'Build Fingerprint Leaked To Device Logs',
-        description: 'The information specified has been found within device logs. Data written to device system logs can be accessed through several attack vectors.  An attacker who is able to access the charging port may be able to access this data if the user acknowledges the trust.  Another attack vector includes devices that allow other apps to view the device system logs.  This is common on various OEM devices.',
-        recommendation: 'To prevent this sensitive information from being compromised (such as by\nanother application or process running on the same device), it is recommended\nthat debug logs be disabled in a production environment. More details and code snippets can be found at [https://developer.android.com/studio/publish/preparing](https://developer.android.com/studio/publish/preparing). \n\nAnother method involves leveraging ProGuard or DexGuard (or an alternative) to completely remove the\nmethod calls to the Log class, thus stripping all calls to Log.d, Log.i,\nLog.v, Log.e methods. One example is use add the following snippet to\n`proguard.cfg`:\n\n```\n-assumenosideeffects class android.util.Log {\n  public static *** d(...);\n  public static *** v(...);\n  public static *** i(...);\n  public static *** e(...);\n}\n```\nThe context table below shows the log entries that contained the sensitive information specified.',
-        severity: 'low'
-       }
-},
-{...}]
+{
+    "6b2a7a6d-a7e5-48a0-b8c9-ddbbf9b2038d": {
+        "key": "local_auth_check",
+        "title": "Application Includes Insecure Library for Processing Biometric Authentication",
+        "description": "The Local Authentication library was found included in your application binary. At worst, it is being used for biometric authentication that is easily bypassed by someone with access to the device. At best, it is extraneous functionality that should not be included in the app as a best practice.",
+        "recommendation": "Consider using Keychain ACLs (Access Control Lists) to achieve similar\nfunctionality.\n\nAn example implementation would store the application's\nsecret in a Keychain and assign an ACL to this Keychain item that would\ninstruct iOS to perform a user presence check before reading and returning\nthe Keychain item to the application. Sample code can be found\non [Apple's website](https://developer.apple.com/documentation/localauthentication/accessing_keychain_items_with_face_id_or_touch_id).",
+        "severity": "low"
+    },
+    "6e53cd8c-e317-4af0-8b38-d81728301a4d": {
+        "key": "app_transport_security",
+        "title": "Disabled App Protection (ATS) Can Lead to Insecure Network Connections",
+        "description": "Your application has globally disabled App Transport Security (ATS). ATS helps ensure secure connections between an app and the back end server(s). Disabling ATS globally will allow a\nconnection regardless of HTTP or HTTPS configuration, allow\nconnection to servers with lower TLS versions, and allow connection\nusing cipher suites that do not support forward secrecy (FS).\nIt is on by default when an app is linked against iOS 9.0 SDK or later. With ATS enabled, HTTP connections are forced to use HTTPS (TLS v1.2), and any attempts to connect using insecure HTTP will fail. There are a couple of options when implementing ATS:\n* ATS can be enabled globally (by linking to iOS 9.0 or later SDK), and the developer can choose to decrease ATS restrictions on a specific server using an exception key.\n* ATS can be disabled globally (by settings the NSAllowsArbitraryLoads key to YES). An exception could then allow the developer to increase ATS restrictions on a specific server. Uses of weak ciphers and old versions of TLS, along with only accepting valid self-signed certificates are all processes that can lead to man-in-the-middle attacks, but can be prevented through the use of AppTransportSecurity.  This client side protection can be used to enforce widely adopted best practice networks security standards, and should be used on all apps.",
+        "recommendation": "For apps running on iOS 9.0 or higher, ATS must be\nenabled globally by linking to the iOS 9.0 or later SDK, and avoid\nsetting the \"NSAllowsArbitraryLoads\" key to \"Yes\" or \"True.\" For any\nexisting apps which communicate to servers over HTTP, an exception must\nbe set using either the “NSExceptionAllowsInsecureHTTPLoads” or\n“NSThirdPartyExceptionAllowsInsecureHTTPLoads” key.\n\nInstructions for Cordova can be found at https://cordova.apache.org/docs/en/9.x/guide/appdev/whitelist/index.html#ios-whitelisting",
+        "severity": "medium"
+    },
+    {...}
+}
 ```
 
 ## Example workflow
@@ -51,11 +59,18 @@ jobs:
               uses: actions/setup-node@v1
               with:
                   node-version: 12.x
+            -  name: Checkout Nowsecure GitHub Action Repo
+               uses: actions/checkout@v2
+               with:
+                  repository: camelotls/actions-nowsecure
+                  ref: v1.0.0
+                  token: ${{ secrets.MACHINEUSER_GITHUB_TOKEN }}
+                  path: actions-nowsecure
             - name: Execute Nowsecure action
               id: nowsecure_action
               uses: ./actions-nowsecure/
               with:
-                  PLATFORMS: "ios,android"
+                  PLATFORMS: 'ios,android'
                   NOWSECURE_ACCESS_TOKEN: ${{ secrets.NOWSECURE_ACCESS_TOKEN }}
                   IOS_PACKAGE: 'co.uk.camelot'
                   ANDROID_PACKAGE: 'uk.co.theofficialnationallotteryapp.android.play'
@@ -63,7 +78,7 @@ jobs:
               uses: actions/checkout@v2
               with:
                   repository: camelotls/actions-jira-integration
-                  ref: v1.1.1
+                  ref: v1.2.0
                   token: ${{ secrets.MACHINEUSER_GITHUB_TOKEN }}
                   path: actions-jira-integration
             - name: Jira ticket creation
@@ -72,15 +87,14 @@ jobs:
               with:
                    JIRA_USER: ${{ secrets.JIRA_USER }}
                    JIRA_PASSWORD: ${{ secrets.JIRA_PASSWORD }}
-                   INPUT_JSON: ${{ steps.nowsecure_action.outputs.reportOutput }}
+                   INPUT_JSON: ${{ steps.nowsecure_action.outputs.nowsecureReportData }}
                    JIRA_PROJECT: MBIL
                    JIRA_URI: 'jira.camelot.global'
                    REPORT_INPUT_KEYS: |
-                       vulnerabilityName: {{key}}
-                       issueSummary: Nowsecure: {{title}}
-                       issueDescription: \`*Recommendation*:\\n\\n{{recommendation}}\\n\\n*Details for {{key}}*\\n\\n*Overview*\\n\\n{{description}}\\n\\n`
-                       issueSeverity: {{severity}}
-                   IS_NPM_AUDIT: false
+                                          vulnerabilityName: {{key}}
+                                          issueSummary: Nowsecure: {{title}}
+                                          issueDescription: *Recommendation*:\\n\\n{{recommendation}}\\n\\n*Overview*\\n\\n{{description}}\\n
+                                          issueSeverity: {{severity}}
                    JIRA_ISSUE_TYPE: 'Security Vulnerability'
                    RUNS_ON_GITHUB: true
             - name: Get actions' user id
@@ -93,5 +107,4 @@ jobs:
               uses: peter-murray/reset-workspace-ownership-action@v1
               with:
                   user_id: ${{ steps.get_uid.outputs.uid }}
-
 ```

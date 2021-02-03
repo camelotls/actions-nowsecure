@@ -2,7 +2,7 @@ const core = require('@actions/core');
 const { v4 } = require('uuid');
 
 const nowsecure = require('./helpers/nowsecure-helpers');
-const platforms = core.getInput('PLATFORMS') || process.env.PLATFORMS.split(',');
+const platforms = core.getInput('PLATFORMS').split(',') || process.env.PLATFORMS.split(',');
 
 const startAnalysis = async () => {
     let assessments = [];

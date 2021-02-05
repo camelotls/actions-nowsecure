@@ -3,7 +3,7 @@ const { v4 } = require('uuid');
 
 const nowsecure = require('./helpers/nowsecure-helpers');
 const platforms = core.getInput('PLATFORMS').split(',') || process.env.PLATFORMS.split(',');
-
+const extraReportFields = (core.getInput('REPORT_FIELDS') || process.env.REPORT_FIELDS) ? core.getInput('REPORT_FIELDS').split(',') || process.env.REPORT_FIELDS.split(',') : '';
 const startAnalysis = async () => {
     let assessments = [];
     let tasks = [];
@@ -54,11 +54,12 @@ const startAnalysis = async () => {
     });
 
     // construct the object acting as an input for the Jira Server Integration Action
-    let reportOutput = [];
+    let reportOutput = {};
     filteredReportedIssues.forEach(filteredIssue => {
         filteredIssue.forEach(issue => {
+            let uuid = v4().toString();
             let singleIssueData = {
-                [v4().toString()]: {
+                [uuid]: {
                     key: issue.key,
                     title: issue.title,
                     description: issue.description,
@@ -66,12 +67,34 @@ const startAnalysis = async () => {
                     severity: issue.severity,
                 }
             };
-            reportOutput.push(singleIssueData);
+
+            if(extraReportFields.length > 0) {
+                extraReportFields.forEach(field => {
+                    let extraFields;
+                    if(field.includes('regulatory')) {
+                        let regulation = field.split('-')[1];
+                        extraFields = (issue['regulatory'][regulation] === undefined) ? {
+                            [regulation]: 'No data retrieved'
+                        } : {
+                            // expose the id and url which are built in the regulations under the regulatory field from Nowsecure
+                            [`${regulation}-id`]: issue['regulatory'][regulation][0].id,
+                            [`${regulation}-url`]: issue['regulatory'][regulation][0].url
+                        };
+                    } else {
+                        extraFields = {
+                            [field]: issue[field]
+                        };
+                    }
+
+                    Object.assign(singleIssueData[uuid], extraFields);
+                });
+            }
+
+            Object.assign(reportOutput, singleIssueData);
         });
     });
 
     // output the constructed object
-    console.log(reportOutput);
     core.setOutput('nowsecureReportData', reportOutput);
 };
 

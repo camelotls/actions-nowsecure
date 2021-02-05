@@ -7,6 +7,11 @@ inputs:
   NOWSECURE_ACCESS_TOKEN:
     description: "The access token retrieved from Nowsecure in order for the action to be able to interact with Nowsecure's API"
     required: true
+  # the following fields are exposed by default: key, title, description, recommendation, severity
+  REPORT_FIELDS:
+    description: "A list of valid fields from Nowsecure's assessement report"
+    required: false
+    default: ""
   # at least one of the following needs to be included
   IOS_PACKAGE:
     description: "The name of the app's package for the iOS platform"

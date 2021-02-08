@@ -13,11 +13,46 @@ This repo takes advantage of [Nowsecure's REST API ](https://docs.nowsecure.com/
 |:--:|:--:|:--:|:--:|
 |PLATFORMS|true|N/A|An array of the platforms the Nowsecure report has run against|
 |NOWSECURE_ACCESS_TOKEN|true|N/A|The access token retrieved from Nowsecure in order for the action to be able to interact with Nowsecure's API|
-|IOS_PACKAGE|true|N/A|The name of the app's package for the iOS platform|
-|ANDROID_PACKAGE|true|N/A|The name of the app's package for the Android platform|
+|REPORT_FIELDS|false|N/A|A list of valid fields as returned from [Nowsecure's API](https://docs.nowsecure.com/auto/api/spec/#api-Assessments-getAssessmentResults)|
+|IOS_PACKAGE|false|N/A|The name of the app's package for the iOS platform. At least that is required if ANDROID_PACKAGE has not been provided.|
+|ANDROID_PACKAGE|false|N/A|The name of the app's package for the Android platform. At least that is required if IOS_PACKAGE has not been provided.|
+
+The `REPORT_FIELDS` might contain the field `regulatory` as provided by the Nowsecure report. This field is of the following form:
+
+```
+"regulatory": {
+      "cwe": [
+        {
+          "id": 121,
+          "url": "https://cwe.mitre.org/data/definitions/121.html"
+        }
+      ],
+      "niap": [
+        {
+          "id": "FPT_AEX_EXT.1.5",
+          "url": "https://www.niap-ccevs.org/MMO/PP/-429-M-/pp_app_v1.3_table-reqs.htm#FPT_AEX_EXT.1.5"
+        }
+      ],
+      "fisma_low": [
+        {
+          "id": "SI-3 MALICIOUS CODE PROTECTION",
+          "url": "https://nvd.nist.gov/800-53/Rev4/control/SI-3"
+        }
+      ],
+     ...
+}
+```
+
+In order to fetch the right regulations for your report, please supply the subfield names separated with a dash like this:
+
+- `regulatory-cwe`
+- `regulatory-niap`
+- `...`
+
+According to the regulation you choose to expose, by default the `id` and `url` fields of the first item spotted in the regulation will be returned. If the user requires more information, it is recommended to visit the report itself.
 
 ### Outputs
-The action outputs a array of JSON objects named `NOWSECURE_DATA` which has the following format for example:
+The action, by default, outputs a JSON object named `nowsecureReportData` which has the following format for example:
 
 ```
 {
@@ -40,6 +75,7 @@ The action outputs a array of JSON objects named `NOWSECURE_DATA` which has the 
 ```
 
 ## Example workflow
+To use this action in your workflow you can have a look at the following sample workflow integrating it:
 
 ```
 name: Nowsecure
@@ -72,6 +108,7 @@ jobs:
               with:
                   PLATFORMS: 'ios,android'
                   NOWSECURE_ACCESS_TOKEN: ${{ secrets.NOWSECURE_ACCESS_TOKEN }}
+                  REPORT_FIELDS: 'category,regulatory-cwe'
                   IOS_PACKAGE: 'co.uk.camelot'
                   ANDROID_PACKAGE: 'uk.co.theofficialnationallotteryapp.android.play'
             - name: Checkout Jira integration GitHub Action Repo

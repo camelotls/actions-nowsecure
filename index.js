@@ -89,7 +89,6 @@ const startAnalysis = async () => {
                     Object.assign(singleIssueData[uuid], extraFields);
                 });
             }
-
             Object.assign(reportOutput, singleIssueData);
         });
     });

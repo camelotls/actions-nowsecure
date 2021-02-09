@@ -37,7 +37,7 @@ const GETRequestWrapper = async (requestName, address, accessToken, apiPath, par
                     resolve(obj);
                 })
                 .on('error', err => {
-                    logger.log(err);
+                    console.log(err);
                     obj.body = err;
                     obj.statusCode = response.statusCode;
                     reject(obj);
@@ -46,7 +46,7 @@ const GETRequestWrapper = async (requestName, address, accessToken, apiPath, par
 
         request
             .on('error', err => {
-                logger.log(`GET request ${requestName} encountered the following error: ${err.message}`);
+                console.log(`GET request ${requestName} encountered the following error: ${err.message}`);
                 reject(err);
             });
 

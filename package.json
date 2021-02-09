@@ -4,14 +4,25 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "test": "nyc mocha",
+    "lint": "./node_modules/.bin/eslint"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@actions/core": "^1.2.6",
     "assert": "^2.0.0",
-    "https": "^1.0.0"
+    "chai": "^4.3.0",
+    "eslint": "^7.19.0",
+    "eslint-config-standard": "^16.0.2",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "https": "^1.0.0",
+    "mocha": "^8.2.1",
+    "nock": "^13.0.7",
+    "nyc": "^15.1.0"
   },
   "dependencies": {
     "uuid": "^8.3.2"

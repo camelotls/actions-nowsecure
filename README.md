@@ -130,10 +130,14 @@ jobs:
                    REPORT_INPUT_KEYS: |
                                           vulnerabilityName: {{key}}
                                           issueSummary: Nowsecure: {{title}}
-                                          issueDescription: *Recommendation*:\\n\\n{{recommendation}}\\n\\n*Overview*\\n\\n{{description}}\\n
+                                          issueDescription: *Recommendation*:\r\n{{recommendation}} \r\n \r\n *Overview*:\r\n{{description}} \r\n \r\n *Assessment Version*:\r\n{{assessmentVersion}}
                                           issueSeverity: {{severity}}
                    JIRA_ISSUE_TYPE: 'Security Vulnerability'
                    RUNS_ON_GITHUB: true
+                   PRIORITY_MAPPER: |
+                                           high: P1
+                                           medium: P2
+                                           low: P3
             - name: Get actions' user id
               id: get_uid
               run: |

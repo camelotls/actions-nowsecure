@@ -8,11 +8,20 @@ const extraReportFields = (core.getInput('REPORT_FIELDS') || process.env.REPORT_
 const startAnalysis = async () => {
   const assessments = [];
   const tasks = [];
+  const assessmentVersion = [];
+
   platforms.forEach(platform => {
     tasks.push({
       platform: {
         name: platform,
         latestTaskID: ''
+      }
+    });
+
+    assessmentVersion.push({
+      platform: {
+        name: platform,
+        latestVersion: ''
       }
     });
   });
@@ -27,20 +36,43 @@ const startAnalysis = async () => {
     }
   }
 
-  assessments.forEach(assessmentList => {
-    if (assessmentList[0].platform === 'ios') {
-      tasks[0].platform.latestTaskID = assessmentList[0].task;
-    } else {
-      tasks[1].platform.latestTaskID = assessmentList[0].task;
+  for (const assessment of assessments) {
+    if (assessment[assessment.length - 1].platform === 'ios') {
+      tasks[0].platform.latestTaskID = assessment[assessment.length - 1].task;
     }
-  });
+
+    if(assessment[assessment.length - 1].platform === 'android') {
+      tasks[1].platform.latestTaskID = assessment[assessment.length - 1].task;
+    }
+  }
+
+  for (const task of tasks) {
+    const platform = task.platform.name;
+    const taskID = task.platform.latestTaskID;
+
+    console.log(`Retrieving the version name associated with the ${platform} assessment...`);
+    const report = await nowsecure.retrieveAssessmentReport(platform, taskID);
+
+    if(platform === 'ios') {
+      assessmentVersion[0].platform.latestVersion = report.yaap_filtered.result.info[0].file_info.short_bundle_id;
+    } else {
+      assessmentVersion[1].platform.latestVersion = report.yaap_filtered.result.info[0].file_info.version_name;
+    }
+
+    console.log(`Version name retrieved successfully!`);
+  }
 
   const resultList = [];
   // eslint-disable-next-line no-unused-vars
   for (const [key, taskDetails] of Object.entries(tasks)) {
     console.log(`Retrieving the assessment results for platform ${taskDetails.platform.name}...`);
     const results = await nowsecure.retrieveAssessmentResults(taskDetails.platform.name, taskDetails.platform.latestTaskID);
-    resultList.push(results);
+
+    let platformInfusedResults = [];
+    results.forEach(result => {
+      platformInfusedResults.push(Object.assign(result, { platform: taskDetails.platform.name }));
+    });
+    resultList.push(platformInfusedResults);
 
     if (results !== null || results !== undefined) {
       console.log(`The assessment results for platform ${taskDetails.platform.name} were retrieved successfully!`);
@@ -49,8 +81,8 @@ const startAnalysis = async () => {
 
   // fetch issues flagged with High | Medium | Low severity level
   const filteredReportedIssues = [];
-  resultList.forEach(platform => {
-    filteredReportedIssues.push(platform.filter(reportedIssue => {
+  resultList.forEach(result => {
+    filteredReportedIssues.push(result.filter(reportedIssue => {
       return (reportedIssue.severity === 'low' || reportedIssue.severity === 'medium' || reportedIssue.severity === 'high');
     }));
   });
@@ -60,13 +92,15 @@ const startAnalysis = async () => {
   filteredReportedIssues.forEach(filteredIssue => {
     filteredIssue.forEach(issue => {
       const uuid = v4().toString();
+      const version = issue.platform === 'ios' ? assessmentVersion[0].platform.latestVersion : assessmentVersion[1].platform.latestVersion;
       const singleIssueData = {
         [uuid]: {
           key: issue.key,
           title: issue.title,
           description: issue.description,
           recommendation: issue.recommendation,
-          severity: issue.severity
+          severity: issue.severity,
+          assessmentVersion: version
         }
       };
 

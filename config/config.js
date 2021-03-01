@@ -5,7 +5,8 @@ const NOWSECURE = {
   ENDPOINTS: {
     ASSESSMENT: 'assessment',
     APPLICATION: 'app',
-    RESULTS: 'results'
+    RESULTS: 'results',
+    REPORT: 'report'
   },
   ACCESS_TOKEN: core.getInput('NOWSECURE_ACCESS_TOKEN') || process.env.NOWSECURE_ACCESS_TOKEN
 }

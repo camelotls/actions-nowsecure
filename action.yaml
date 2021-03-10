@@ -19,6 +19,9 @@ inputs:
   ANDROID_PACKAGE:
     description: "The name of the app's package for the Android platform"
     required: false
+  GROUPD_ID:
+    description: "The application group to use for the assessment"
+    required: true
 outputs:
   NOWSECURE_DATA:
     description: "JSON style object with specific data from the Nowsecure report"

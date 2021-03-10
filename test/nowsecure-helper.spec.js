@@ -16,7 +16,6 @@ describe('Nowsecure REST calls are functioning properly', () => {
 
   describe('Nowsecure REST calls successful cases', () => {
     it('An assessment can be retrieved for iOS', async () => {
-      console.log(process.env.GROUP_ID)
       nock(`https://${config.NOWSECURE.URI}`)
         .get(`/${config.NOWSECURE.ENDPOINTS.APPLICATION}/ios/${mock.MOCK_APPLICATION_IOS_PACKAGE}/${config.NOWSECURE.ENDPOINTS.ASSESSMENT}/?group=${mock.MOCK_GROUP_ID}`)
         .reply(200, mock.MOCK_IOS_ASSESSMENT_REPORT);

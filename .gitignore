@@ -1,0 +1,9 @@
+# IntelliJ
+.idea/
+
+#Report Output
+.nyc_output/
+
+
+# node.js
+node_modules/

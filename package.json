@@ -11,20 +11,20 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@actions/core": "^1.2.6",
-    "assert": "^2.0.0",
-    "chai": "^4.3.3",
-    "eslint": "^7.21.0",
-    "eslint-config-standard": "^16.0.2",
-    "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^4.3.1",
-    "https": "^1.0.0",
-    "mocha": "^8.3.0",
-    "nock": "^13.0.10",
-    "nyc": "^15.1.0"
+    "@actions/core": "1.2.6",
+    "assert": "2.0.0",
+    "chai": "4.3.3",
+    "eslint": "7.21.0",
+    "eslint-config-standard": "16.0.2",
+    "eslint-plugin-import": "2.22.1",
+    "eslint-plugin-node": "11.1.0",
+    "eslint-plugin-promise": "4.3.1",
+    "https": "1.0.0",
+    "mocha": "8.3.0",
+    "nock": "13.0.10",
+    "nyc": "15.1.0"
   },
   "dependencies": {
-    "uuid": "^8.3.2"
+    "uuid": "8.3.2"
   }
 }

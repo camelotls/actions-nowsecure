@@ -112,6 +112,7 @@ jobs:
                   REPORT_FIELDS: 'category,regulatory-cwe'
                   IOS_PACKAGE: 'co.uk.camelot'
                   ANDROID_PACKAGE: 'uk.co.theofficialnationallotteryapp.android.play'
+                  NOWSECURE_ACCESS_TOKEN: ${{ secrets.NOWSECURE_ACCESS_TOKEN }}
             - name: Checkout Jira integration GitHub Action Repo
               uses: actions/checkout@v2
               with:

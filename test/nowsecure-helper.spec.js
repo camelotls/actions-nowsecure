@@ -7,12 +7,28 @@ const mock = require('./mocks/nowsecure-helper-mock');
 const config = require('../config/config');
 
 describe('Nowsecure REST calls are functioning properly', () => {
-  process.env = {
-    NOWSECURE_ACCESS_TOKEN: mock.MOCK_ACCESS_TOKEN,
-    IOS_PACKAGE: mock.MOCK_APPLICATION_IOS_PACKAGE,
-    ANDROID_PACKAGE: mock.MOCK_APPLICATION_ANDROID_PACKAGE,
-    GROUP_ID: mock.MOCK_GROUP_ID
-  };
+  before(() => {
+    config.NOWSECURE.GROUP_ID = 'e1a73363-42c2-45e2-b6b1-8d148f9a773e';
+    config.APPLICATION.PACKAGES.ANDROID = 'uk.co.mock.android.play';
+    config.APPLICATION.PACKAGES.IOS = 'co.uk.mock';
+
+    process.env = {
+      NOWSECURE_ACCESS_TOKEN: mock.MOCK_ACCESS_TOKEN,
+      IOS_PACKAGE: mock.MOCK_APPLICATION_IOS_PACKAGE,
+      ANDROID_PACKAGE: mock.MOCK_APPLICATION_ANDROID_PACKAGE,
+      GROUP_ID: mock.MOCK_GROUP_ID
+    };
+  });
+
+  after(() => {
+    delete process.env.NOWSECURE_ACCESS_TOKEN;
+    delete process.env.IOS_PACKAGE;
+    delete process.env.ANDROID_PACKAGE;
+    delete process.env.GROUP_ID;
+    delete config.NOWSECURE.GROUP_ID;
+    delete config.APPLICATION.PACKAGES.ANDROID;
+    delete config.APPLICATION.PACKAGES.IOS;
+  });
 
   describe('Nowsecure REST calls successful cases', () => {
     it('An assessment can be retrieved for iOS', async () => {

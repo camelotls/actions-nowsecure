@@ -16,6 +16,7 @@ This repo takes advantage of [Nowsecure's REST API ](https://docs.nowsecure.com/
 |REPORT_FIELDS|false|N/A|A list of valid fields as returned from [Nowsecure's API](https://docs.nowsecure.com/auto/api/spec/#api-Assessments-getAssessmentResults)|
 |IOS_PACKAGE|false|N/A|The name of the app's package for the iOS platform. At least that is required if ANDROID_PACKAGE has not been provided.|
 |ANDROID_PACKAGE|false|N/A|The name of the app's package for the Android platform. At least that is required if IOS_PACKAGE has not been provided.|
+|NOWSECURE_GROUP_ID|true|N/A|The application group to use for the assessment.|
 
 The `REPORT_FIELDS` might contain the field `regulatory` as provided by the Nowsecure report. This field is of the following form:
 

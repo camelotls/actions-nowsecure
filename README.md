@@ -116,7 +116,7 @@ jobs:
                   REPORT_FIELDS: 'category,regulatory-cwe'
                   IOS_PACKAGE: 'ios.mock'
                   ANDROID_PACKAGE: 'android.mock'
-                  NOWSECURE_GROUP_ID: ${{ secrets.PLI_NOWSECURE_GROUP_ID }}
+                  NOWSECURE_GROUP_ID: ${{ secrets.NOWSECURE_GROUP_ID }}
             - name: Checkout Jira integration GitHub Action Repo
               uses: actions/checkout@v2
               with:

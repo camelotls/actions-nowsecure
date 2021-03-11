@@ -13,11 +13,11 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Lint Code Base
+      - name: Lint Code BaseS
         uses: github/super-linter@v3
         env:
           DEFAULT_BRANCH: main
-          VALIDATE_DOCKERFILE: true 
+          VALIDATE_DOCKERFILE: true
           VALIDATE_JAVASCRIPT_ES: true
           VALIDATE_YAML: true
           VALIDATE_ALL_CODEBASE: false

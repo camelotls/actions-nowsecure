@@ -8,6 +8,7 @@ const mock = require('./mocks/nowsecure-helper-mock');
 const config = require('../config/config');
 
 describe('Nowsecure REST calls are functioning properly', () => {
+  // eslint-disable-next-line no-undef
   before(() => {
     config.NOWSECURE.GROUP_ID = 'e1a73363-47c2-45e2-b8b1-8a188f9a773e';
     config.APPLICATION.PACKAGES.ANDROID = 'android.mock';
@@ -21,6 +22,7 @@ describe('Nowsecure REST calls are functioning properly', () => {
     };
   });
 
+  // eslint-disable-next-line no-undef
   after(() => {
     delete process.env.NOWSECURE_ACCESS_TOKEN;
     delete process.env.IOS_PACKAGE;

@@ -3,6 +3,7 @@ const nock = require('nock');
 const { describe, it } = require('mocha');
 
 const nowsecure = require('../helpers/nowsecure-helpers');
+const rest = require('../helpers/rest-helper');
 const mock = require('./mocks/nowsecure-helper-mock');
 const config = require('../config/config');
 
@@ -138,6 +139,17 @@ describe('Nowsecure REST calls are functioning properly', () => {
         'regulatory',
         'affected',
         'severity');
+    });
+    it('Assessment report cannot be retrieved for Android', async () => {
+      const nowsecureEndpoint = `/${config.NOWSECURE.ENDPOINTS.APPLICATION}/android/${mock.MOCK_APPLICATION_ANDROID_PACKAGE}/${config.NOWSECURE.ENDPOINTS.ASSESSMENT}/${mock.MOCK_ANDROID_TASK}/report?group=${mock.MOCK_GROUP_ID}`;
+
+      nock(`https://${config.NOWSECURE.URI}`)
+        .get(nowsecureEndpoint)
+        .replyWithError(mock.MOCK_ERROR_ASSESSMENT_RESULT);
+
+      await rest.GETRequestWrapper('retrieveAssessmentResults', config.NOWSECURE.URI, config.NOWSECURE.ACCESS_TOKEN, nowsecureEndpoint, true);
+      // .then((res) => res.to.be.equal('Assessment not found within user scope'));
+      // expect(assessmentResults.body.message).to.be.equal('Assessment not found within user scope');
     });
   });
 });

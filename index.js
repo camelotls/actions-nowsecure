@@ -41,7 +41,7 @@ const startAnalysis = async () => {
       tasks[0].platform.latestTaskID = assessment[assessment.length - 1].task;
     }
 
-    if(assessment[assessment.length - 1].platform === 'android') {
+    if (assessment[assessment.length - 1].platform === 'android') {
       tasks[1].platform.latestTaskID = assessment[assessment.length - 1].task;
     }
   }
@@ -53,13 +53,13 @@ const startAnalysis = async () => {
     console.log(`Retrieving the version name associated with the ${platform} assessment...`);
     const report = await nowsecure.retrieveAssessmentReport(platform, taskID);
 
-    if(platform === 'ios') {
+    if (platform === 'ios') {
       assessmentVersion[0].platform.latestVersion = report.yaap_filtered.result.info[0].file_info.short_bundle_id;
     } else {
       assessmentVersion[1].platform.latestVersion = report.yaap_filtered.result.info[0].file_info.version_name;
     }
 
-    console.log(`Version name retrieved successfully!`);
+    console.log('Version name retrieved successfully!');
   }
 
   const resultList = [];
@@ -68,6 +68,7 @@ const startAnalysis = async () => {
     console.log(`Retrieving the assessment results for platform ${taskDetails.platform.name}...`);
     const results = await nowsecure.retrieveAssessmentResults(taskDetails.platform.name, taskDetails.platform.latestTaskID);
 
+    // eslint-disable-next-line prefer-const
     let platformInfusedResults = [];
     results.forEach(result => {
       platformInfusedResults.push(Object.assign(result, { platform: taskDetails.platform.name }));

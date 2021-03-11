@@ -94,7 +94,7 @@ jobs:
         name: 'Creating Jira tickets for the Nowsecure detected vulnerabilities'
         runs-on: aws-core-runner
         steps:
-            - name: Checkout uk-mobile repo
+            - name: Checkout repo
               uses: actions/checkout@v2
             - name: Use Node.js 12.x
               uses: actions/setup-node@v1
@@ -114,8 +114,9 @@ jobs:
                   PLATFORMS: 'ios,android'
                   NOWSECURE_ACCESS_TOKEN: ${{ secrets.NOWSECURE_ACCESS_TOKEN }}
                   REPORT_FIELDS: 'category,regulatory-cwe'
-                  IOS_PACKAGE: 'co.uk.camelot'
-                  ANDROID_PACKAGE: 'uk.co.theofficialnationallotteryapp.android.play'
+                  IOS_PACKAGE: 'ios.mock'
+                  ANDROID_PACKAGE: 'android.mock'
+                  NOWSECURE_GROUP_ID: ${{ secrets.NOWSECURE_GROUP_ID }}
             - name: Checkout Jira integration GitHub Action Repo
               uses: actions/checkout@v2
               with:
@@ -130,8 +131,8 @@ jobs:
                    JIRA_USER: ${{ secrets.JIRA_USER }}
                    JIRA_PASSWORD: ${{ secrets.JIRA_PASSWORD }}
                    INPUT_JSON: ${{ steps.nowsecure_action.outputs.nowsecureReportData }}
-                   JIRA_PROJECT: MBIL
-                   JIRA_URI: 'jira.camelot.global'
+                   JIRA_PROJECT: DUMMY
+                   JIRA_URI: 'jira.endpoint'
                    REPORT_INPUT_KEYS: |
                                           vulnerabilityName: {{key}}
                                           issueSummary: Nowsecure: {{title}}

@@ -1,4 +1,4 @@
-const core = require('@actions/core')
+const core = require('@actions/core');
 
 const NOWSECURE = {
   URI: 'lab-api.nowsecure.com',
@@ -23,4 +23,4 @@ const APPLICATION = {
   }
 };
 
-module.exports = { NOWSECURE: NOWSECURE, REST: REST, APPLICATION: APPLICATION }
+module.exports = { NOWSECURE: NOWSECURE, REST: REST, APPLICATION: APPLICATION };

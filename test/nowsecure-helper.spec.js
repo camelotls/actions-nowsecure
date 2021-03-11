@@ -9,9 +9,9 @@ const config = require('../config/config');
 
 describe('Nowsecure REST calls are functioning properly', () => {
   before(() => {
-    config.NOWSECURE.GROUP_ID = 'e1a73363-42c2-45e2-b6b1-8d148f9a773e';
-    config.APPLICATION.PACKAGES.ANDROID = 'uk.co.mock.android.play';
-    config.APPLICATION.PACKAGES.IOS = 'co.uk.mock';
+    config.NOWSECURE.GROUP_ID = 'e1a73363-47c2-45e2-b8b1-8a188f9a773e';
+    config.APPLICATION.PACKAGES.ANDROID = 'android.mock';
+    config.APPLICATION.PACKAGES.IOS = 'ios.mock';
 
     process.env = {
       NOWSECURE_ACCESS_TOKEN: mock.MOCK_ACCESS_TOKEN,

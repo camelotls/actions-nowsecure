@@ -68,7 +68,8 @@ const startAnalysis = async () => {
     console.log(`Retrieving the assessment results for platform ${taskDetails.platform.name}...`);
     const results = await nowsecure.retrieveAssessmentResults(taskDetails.platform.name, taskDetails.platform.latestTaskID);
 
-    const platformInfusedResults = [];
+    // eslint-disable-next-line prefer-const
+    let platformInfusedResults = [];
     results.forEach(result => {
       platformInfusedResults.push(Object.assign(result, { platform: taskDetails.platform.name }));
     });

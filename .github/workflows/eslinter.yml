@@ -22,4 +22,4 @@ jobs:
           npm run lint config/**
           npm run lint helpers/**
           npm run lint test/**
-          npm run lint utils/**
+

@@ -22,7 +22,7 @@ This repo takes advantage of [Nowsecure's REST API ](https://docs.nowsecure.com/
 |ANDROID_PACKAGE|false|N/A|The name of the app's package for the Android platform. At least that is required if IOS_PACKAGE has not been provided.|
 |NOWSECURE_GROUP_ID|true|N/A|The application group to use for the assessment.|
 
-The `REPORT_FIELDS` might contain the field `regulatory` as provided by the Nowsecure report. This field is of the following form
+The `REPORT_FIELDS` might contain the field `regulatory` as provided by the Nowsecure report. This field is of the following
 
 ```
 "regulatory": {

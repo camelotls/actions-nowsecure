@@ -15,7 +15,6 @@ This repo takes advantage of [Nowsecure's REST API ](https://docs.nowsecure.com/
 ### Inputs
 |Parameter|Required|Default value|Description|
 |:--:|:--:|:--:|:--:|
-|PLATFORMS|true|N/A|An array of the platforms the Nowsecure report has run against|
 |NOWSECURE_ACCESS_TOKEN|true|N/A|The access token retrieved from Nowsecure in order for the action to be able to interact with Nowsecure's API|
 |REPORT_FIELDS|false|N/A|A list of valid fields as returned from [Nowsecure's API](https://docs.nowsecure.com/auto/api/spec/#api-Assessments-getAssessmentResults)|
 |IOS_PACKAGE|false|N/A|The name of the app's package for the iOS platform. At least that is required if ANDROID_PACKAGE has not been provided.|

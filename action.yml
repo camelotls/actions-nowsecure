@@ -22,6 +22,9 @@ inputs:
   NOWSECURE_GROUP_ID:
     description: "The application group to use for the assessment"
     required: true
+  SEVERITY_LIST:
+    description: "The list of severity issues provided by nowsecure"
+    required: false
 outputs:
   NOWSECURE_DATA:
     description: "JSON style object with specific data from the Nowsecure report"

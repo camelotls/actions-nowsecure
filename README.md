@@ -24,6 +24,7 @@ This repo takes advantage of [Nowsecure's REST API ](https://docs.nowsecure.com/
 |IOS_PACKAGE|false|N/A|The name of the app's package for the iOS platform. At least that is required if ANDROID_PACKAGE has not been provided.|
 |ANDROID_PACKAGE|false|N/A|The name of the app's package for the Android platform. At least that is required if IOS_PACKAGE has not been provided.|
 |NOWSECURE_GROUP_ID|true|N/A|The application group to use for the assessment.|
+|SEVERITY_LIST|false|N/A|The severity list based on nowsecure.If there is no input in severity list then by default will fetch all the severity types(high,medium,low,info,warn)|
 
 The `REPORT_FIELDS` might contain the field `regulatory` as provided by the Nowsecure report. This field is of the following form:
 
@@ -120,6 +121,7 @@ jobs:
                   IOS_PACKAGE: 'ios.mock'
                   ANDROID_PACKAGE: 'android.mock'
                   NOWSECURE_GROUP_ID: ${{ secrets.NOWSECURE_GROUP_ID }}
+                  SEVERITY_LIST: ''
             - name: Checkout Jira integration GitHub Action Repo
               uses: actions/checkout@v2
               with:

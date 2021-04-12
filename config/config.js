@@ -25,6 +25,6 @@ const APPLICATION = {
 
 const SEVERITIES = {
   LIST: 'high,medium,low,warn,info'
-}
+};
 
 module.exports = { NOWSECURE: NOWSECURE, REST: REST, APPLICATION: APPLICATION, SEVERITIES: SEVERITIES };

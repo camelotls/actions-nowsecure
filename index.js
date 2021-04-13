@@ -8,7 +8,7 @@ const severityList = core.getInput('SEVERITY_LIST') || process.env.SEVERITY_LIST
 let severityListSplit;
 
 if (severityList !== undefined) {
-  severityListSplit = severityList.split(',');
+   severityListSplit = severityList.split(',').map((item) => item.trim());
 } else {
   console.log('SEVERITY_LIST has not been provided so all the severities will be fetched...');
   severityListSplit = SEVERITIES.LIST.split(',');

@@ -1,10 +1,19 @@
 const core = require('@actions/core');
 const { v4 } = require('uuid');
+const { SEVERITIES } = require('./config/config');
 
 const nowsecure = require('./helpers/nowsecure-helpers');
 const platforms = core.getInput('PLATFORMS').split(',') || process.env.PLATFORMS.split(',');
-const extraReportFields = (core.getInput('REPORT_FIELDS') || process.env.REPORT_FIELDS) ? core.getInput('REPORT_FIELDS').split(',') || process.env.REPORT_FIELDS.split(',') : '';
+const severityList = core.getInput('SEVERITY_LIST') || process.env.SEVERITY_LIST;
+let severityListSplit;
 
+if (severityList !== undefined) {
+  severityListSplit = severityList.split(',').map((item) => item.trim());
+} else {
+  console.log('SEVERITY_LIST has not been provided so all the severities will be fetched...');
+  severityListSplit = SEVERITIES.LIST.split(',');
+}
+const extraReportFields = (core.getInput('REPORT_FIELDS') || process.env.REPORT_FIELDS) ? core.getInput('REPORT_FIELDS').split(',') || process.env.REPORT_FIELDS.split(',') : '';
 const startAnalysis = async () => {
   const assessments = [];
   const tasks = [];
@@ -82,12 +91,13 @@ const startAnalysis = async () => {
 
   // fetch issues flagged with High | Medium | Low severity level
   const filteredReportedIssues = [];
-  resultList.forEach(result => {
-    filteredReportedIssues.push(result.filter(reportedIssue => {
-      return (reportedIssue.severity === 'low' || reportedIssue.severity === 'medium' || reportedIssue.severity === 'high');
-    }));
-  });
-
+  for (const severityIssue of severityListSplit) {
+    resultList.forEach(result => {
+      filteredReportedIssues.push(result.filter(reportedIssue => {
+        return (reportedIssue.severity === severityIssue);
+      }));
+    });
+  }
   // construct the object acting as an input for the Jira Server Integration Action
   const reportOutput = {};
   filteredReportedIssues.forEach(filteredIssue => {

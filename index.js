@@ -1,6 +1,7 @@
 const core = require('@actions/core');
 const { v4 } = require('uuid');
 const { SEVERITIES } = require('./config/config');
+const _ = require('lodash');
 
 const nowsecure = require('./helpers/nowsecure-helpers');
 const platforms = core.getInput('PLATFORMS').split(',') || process.env.PLATFORMS.split(',');
@@ -61,34 +62,49 @@ const startAnalysis = async () => {
 
     console.log(`Retrieving the version name associated with the ${platform} assessment...`);
     const report = await nowsecure.retrieveAssessmentReport(platform, taskID);
-
-    if (platform === 'ios') {
-      assessmentVersion[0].platform.latestVersion = report.yaap_filtered.result.info[0].file_info.short_bundle_id;
+    if (report.statusCode !== 200) {
+      console.log(`Assessment's report cannot be retrieved for platform ${platform}: ${report.body.message}`);
     } else {
-      assessmentVersion[1].platform.latestVersion = report.yaap_filtered.result.info[0].file_info.version_name;
+      if (_.isEmpty(report.body.yaap_filtered.result)) {
+        console.log(`Assessment is currently running or Assessment's report is Incomplete for platform ${platform}.You may try to re-run the assessment...`);
+        continue;
+      } else {
+        if (platform === 'ios') {
+          assessmentVersion[0].platform.latestVersion = report.body.yaap_filtered.result.info[0].file_info.short_bundle_id;
+        } else {
+          assessmentVersion[1].platform.latestVersion = report.body.yaap_filtered.result.info[0].file_info.version_name;
+        }
+      }
     }
-
     console.log('Version name retrieved successfully!');
   }
 
   const resultList = [];
   // eslint-disable-next-line no-unused-vars
   for (const [key, taskDetails] of Object.entries(tasks)) {
-    console.log(`Retrieving the assessment results for platform ${taskDetails.platform.name}...`);
-    const results = await nowsecure.retrieveAssessmentResults(taskDetails.platform.name, taskDetails.platform.latestTaskID);
+    const platform = taskDetails.platform.name;
+    console.log(`Retrieving the assessment results for platform ${platform}...`);
+    const results = await nowsecure.retrieveAssessmentResults(platform, taskDetails.platform.latestTaskID);
+    if (results.statusCode !== 200) {
+      console.log(`Assessment's results cannot be retrieved for platform ${platform}: ${results.body.message}`);
+      continue;
+    } else {
+      if (!_.isEmpty(results.body)) {
+        // eslint-disable-next-line prefer-const
+        let platformInfusedResults = [];
+        results.body.forEach(result => {
+          platformInfusedResults.push(Object.assign(result, { platform: platform }));
+        });
+        resultList.push(platformInfusedResults);
 
-    // eslint-disable-next-line prefer-const
-    let platformInfusedResults = [];
-    results.forEach(result => {
-      platformInfusedResults.push(Object.assign(result, { platform: taskDetails.platform.name }));
-    });
-    resultList.push(platformInfusedResults);
-
-    if (results !== null || results !== undefined) {
-      console.log(`The assessment results for platform ${taskDetails.platform.name} were retrieved successfully!`);
+        if (results !== null || results !== undefined) {
+          console.log(`The assessment results for platform ${platform} were retrieved successfully!`);
+        }
+      } else {
+        console.log(`The assessment results for platform ${platform} are empty...`);
+      }
     }
   }
-
   // fetch issues flagged with High | Medium | Low severity level
   const filteredReportedIssues = [];
   for (const severityIssue of severityListSplit) {
@@ -143,7 +159,8 @@ const startAnalysis = async () => {
   });
 
   // output the constructed object
-  core.setOutput('nowsecureReportData', reportOutput);
+  // core.setOutput('nowsecureReportData', reportOutput);
+  console.log(reportOutput);
 };
 
 (async () => {

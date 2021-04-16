@@ -66,7 +66,7 @@ const startAnalysis = async () => {
       console.log(`Assessment's report cannot be retrieved for platform ${platform}: ${report.body.message}`);
     } else {
       if (_.isEmpty(report.body.yaap_filtered.result)) {
-        console.log(`Assessment is currently running or Assessment's report is Incomplete for platform ${platform}.You may try to re-run the assessment...`);
+        console.log(`Assessment is currently running or Assessment's report is Incomplete for platform ${platform}. You may try to re-run the assessment...`);
         continue;
       } else {
         if (platform === 'ios') {
@@ -83,7 +83,9 @@ const startAnalysis = async () => {
   // eslint-disable-next-line no-unused-vars
   for (const [key, taskDetails] of Object.entries(tasks)) {
     const platform = taskDetails.platform.name;
+
     console.log(`Retrieving the assessment results for platform ${platform}...`);
+
     const results = await nowsecure.retrieveAssessmentResults(platform, taskDetails.platform.latestTaskID);
     if (results.statusCode !== 200) {
       console.log(`Assessment's results cannot be retrieved for platform ${platform}: ${results.body.message}`);

@@ -92,7 +92,7 @@ describe('Nowsecure REST calls are functioning properly', () => {
         .reply(200, mock.MOCK_IOS_ASSESSMENT_REPORT_PER_TASK);
 
       const assessmentResults = await nowsecure.retrieveAssessmentResults('ios', mock.MOCK_IOS_TASK);
-      expect(assessmentResults[0]).to.be.instanceOf(Object).to.have.all.keys('yaap_filtered',
+      expect(assessmentResults.body[0]).to.be.instanceOf(Object).to.have.all.keys('yaap_filtered',
         'yaap',
         'static',
         'dynamic');
@@ -103,7 +103,7 @@ describe('Nowsecure REST calls are functioning properly', () => {
         .reply(200, mock.MOCK_IOS_ASSESSMENT_REPORT_PER_TASK);
 
       const assessmentResults = await nowsecure.retrieveAssessmentResults('android', mock.MOCK_ANDROID_TASK);
-      expect(assessmentResults[0]).to.be.instanceOf(Object).to.have.all.keys('yaap_filtered',
+      expect(assessmentResults.body[0]).to.be.instanceOf(Object).to.have.all.keys('yaap_filtered',
         'yaap',
         'static',
         'dynamic');
@@ -114,7 +114,7 @@ describe('Nowsecure REST calls are functioning properly', () => {
         .reply(200, mock.MOCK_IOS_ASSESSMENT_RESULT);
 
       const assessmentResults = await nowsecure.retrieveAssessmentReport('ios', mock.MOCK_IOS_TASK);
-      expect(assessmentResults[0]).to.be.instanceOf(Object).to.have.all.keys('key',
+      expect(assessmentResults.body[0]).to.be.instanceOf(Object).to.have.all.keys('key',
         'kind',
         'title',
         'category',
@@ -131,7 +131,7 @@ describe('Nowsecure REST calls are functioning properly', () => {
         .reply(200, mock.MOCK_IOS_ASSESSMENT_RESULT);
 
       const assessmentResults = await nowsecure.retrieveAssessmentReport('android', mock.MOCK_ANDROID_TASK);
-      expect(assessmentResults[0]).to.be.instanceOf(Object).to.have.all.keys('key',
+      expect(assessmentResults.body[0]).to.be.instanceOf(Object).to.have.all.keys('key',
         'kind',
         'title',
         'category',

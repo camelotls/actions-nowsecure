@@ -17,7 +17,6 @@ const retrieveAssessmentResults = async function retrieveAssessmentResults (plat
   const appPackage = platform === 'android' ? config.APPLICATION.PACKAGES.ANDROID : config.APPLICATION.PACKAGES.IOS;
   const nowsecureEndpoint = `/${config.NOWSECURE.ENDPOINTS.APPLICATION}/${platform}/${appPackage}/${config.NOWSECURE.ENDPOINTS.ASSESSMENT}/${task}/${config.NOWSECURE.ENDPOINTS.RESULTS}?group=${config.NOWSECURE.GROUP_ID}`;
   const response = await rest.GETRequestWrapper(retrieveAssessmentResults.name, config.NOWSECURE.URI, config.NOWSECURE.ACCESS_TOKEN, nowsecureEndpoint, true);
-  console.log(response)
   return response;
 };
 

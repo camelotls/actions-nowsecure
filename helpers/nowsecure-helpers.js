@@ -9,7 +9,6 @@ const retrieveAssessment = async function retrieveAssessment (platform) {
   const response = await rest.GETRequestWrapper(retrieveAssessment.name, config.NOWSECURE.URI, config.NOWSECURE.ACCESS_TOKEN, nowsecureEndpoint, true);
 
   assert(response.statusCode === 200, `Assessment cannot be retrieved for platform ${platform}: ${response.body.message}`);
-
   return response.body;
 };
 

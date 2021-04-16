@@ -159,8 +159,7 @@ const startAnalysis = async () => {
   });
 
   // output the constructed object
-  // core.setOutput('nowsecureReportData', reportOutput);
-  console.log(reportOutput);
+   core.setOutput('nowsecureReportData', reportOutput);
 };
 
 (async () => {

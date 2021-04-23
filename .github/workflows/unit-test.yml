@@ -16,5 +16,5 @@ jobs:
           node-version: 12.x
       - name: Install Dependencies
         run: npm i
-      - name: Test
+      - name: Run Unit Tests
         run: npm run test

@@ -1,0 +1,23 @@
+{
+  "name": "schema-validator",
+  "version": "1.0.0",
+  "description": "Small app to validate the Nowsecure schema",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@actions/core": "1.2.6",
+    "@actions/github": "4.0.0"
+  },
+  "devDependencies": {
+    "dirty-json": "0.9.2",
+    "jsonschema": "1.4.0"
+  }
+}

@@ -1,4 +1,3 @@
-const core = require('@actions/core');
 const dirtyJSON = require('dirty-json');
 const Validator = require('jsonschema').Validator;
 const inputData = process.env.INPUT_DATA;

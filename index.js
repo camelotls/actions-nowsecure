@@ -4,8 +4,8 @@ const { SEVERITIES } = require('./config/config');
 const _ = require('lodash');
 
 const nowsecure = require('./helpers/nowsecure-helpers');
-const platforms =  process.env.PLATFORMS.split(',');
-const severityList =  process.env.SEVERITY_LIST;
+const platforms = core.getInput('PLATFORMS').split(',') || process.env.PLATFORMS.split(',');
+const severityList = core.getInput('SEVERITY_LIST') || process.env.SEVERITY_LIST;
 let severityListSplit;
 
 if (severityList !== undefined) {
@@ -161,8 +161,7 @@ const startAnalysis = async () => {
   });
 
   // output the constructed object
-  // core.setOutput('nowsecureReportData', reportOutput);
-  console.log(reportOutput);
+  core.setOutput('nowsecureReportData', reportOutput);
 };
 
 (async () => {

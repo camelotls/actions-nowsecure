@@ -1,6 +1,7 @@
+const core = require('@actions/core');
 const dirtyJSON = require('dirty-json');
 const Validator = require('jsonschema').Validator;
-const inputData = process.env.INPUT_DATA;
+const inputData =core.getInput('INPUT_DATA') || process.env.INPUT_DATA;
 
 const nowSecureIssueSchema = {
     "type": "object",
@@ -21,7 +22,7 @@ const nowSecureIssueSchema = {
                     "type": "string"
                 },
                 "severity": {
-                    "type": "string"
+                    "type": "number"
                 }
             },
             "required": ["key", "title", "description", "recommendation", "severity"]

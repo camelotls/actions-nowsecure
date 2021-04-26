@@ -14,14 +14,13 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 12.x
-      - name: Checkout Nowsecure GitHub Action Repo
-        uses: actions/checkout@v2
-        with:
-         repository: camelotls/actions-nowsecure
-         ref: v1.3.0
-         token: ${{ secrets.MACHINEUSER_GITHUB_TOKEN }}
-         path: actions-nowsecure
-
+#      - name: Checkout Nowsecure GitHub Action Repo
+#        uses: actions/checkout@v2
+#        with:
+#         repository: camelotls/actions-nowsecure
+#         ref: v1.3.0
+#         token: ${{ secrets.MACHINEUSER_GITHUB_TOKEN }}
+#         path: actions-nowsecure
       - name: Execute Nowsecure action
         id: nowsecure_action
         uses: ./actions-nowsecure/

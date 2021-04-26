@@ -12,6 +12,7 @@ jobs:
         uses: actions/checkout@v2
         with:
          path: actions-nowsecure
+     - name: check PWD
         run: pwd
       - name: Use Node.js 12.x
         uses: actions/setup-node@v1
@@ -26,7 +27,6 @@ jobs:
 #         path: actions-nowsecure
       - name: Execute Nowsecure action
         id: nowsecure_action
-        run: pwd
         uses: ./actions-nowsecure/
         with:
           PLATFORMS: 'ios,android'

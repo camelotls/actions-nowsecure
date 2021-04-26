@@ -36,7 +36,7 @@ jobs:
           NOWSECURE_GROUP_ID: ${{ secrets.UK_NOWSECURE_GROUP_ID }}
           SEVERITY_LIST: 'high,medium,low'
       - name: Run Int Tests
-        uses: ./.github/actions/schema-validator
+        uses: .github/actions/schema-validator
         with:
           MACHINEUSER_GITHUB_TOKEN: ${{ secrets.MACHINEUSER_GITHUB_TOKEN }}
           INPUT_DATA: ${{ steps.nowsecure_action.outputs.nowsecureReportData }}

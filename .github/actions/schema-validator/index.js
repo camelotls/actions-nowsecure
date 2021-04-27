@@ -6,7 +6,7 @@ const inputData =core.getInput('INPUT_DATA') || process.env.INPUT_DATA;
 const nowSecureIssueSchema = {
     "type": "object",
     "patternProperties": {
-        "^[a-zA-Z0-9{}/]+$": {
+        "^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12}$": {
             "type": "object",
             "properties": {
                 "key": {
@@ -22,23 +22,29 @@ const nowSecureIssueSchema = {
                     "type": "string"
                 },
                 "severity": {
-                    "type": "number"
+                    "type": "string"
                 }
             },
             "required": ["key", "title", "description", "recommendation", "severity"]
         }
    },
-    "required": true
+    "required": true,
+    "additionalProperties": false
 }
 
 const jsonValidator = new Validator();
 
 beautifiedInputData = dirtyJSON.parse(inputData);
 
-  const beautifiedInputDataStringified = JSON.stringify(beautifiedInputData);
+// console.log(beautifiedInputData)
+
+ const beautifiedInputDataStringified = JSON.stringify(beautifiedInputData);
+
+// console.log(beautifiedInputDataStringified)
 
   const isValidSchema = (jsonValidator.validate(JSON.parse(beautifiedInputDataStringified), nowSecureIssueSchema).errors.length === 0);
 
+  console.log(jsonValidator.validate(JSON.parse(beautifiedInputDataStringified), nowSecureIssueSchema))
 
   if(isValidSchema) {
       console.log('Schema is valid')

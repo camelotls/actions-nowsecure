@@ -1,6 +1,6 @@
 {
   "6b2a7a6d-a7e5-48a0-b8c9": {
-    "key": "hey",
+    "key": "{\n  \"6b2a7a6d-a7e5-48a0-b8c9\": {\n    \"key\": \"hey\",\n    \"title\": \"awesome\",\n    \"description\": \"The Local Authentication library was found included in your application binary. At worst, it is being used for biometric authentication that is easily bypassed by someone with access to the device. At best, it is extraneous functionality that should not be included in the app as a best practice.\",\n    \"recommendation\": \"Consider\",\n    \"severity\": \"low\"\n  }\n}",
     "title": "awesome",
     "description": "The Local Authentication library was found included in your application binary. At worst, it is being used for biometric authentication that is easily bypassed by someone with access to the device. At best, it is extraneous functionality that should not be included in the app as a best practice.",
     "recommendation": "Consider",

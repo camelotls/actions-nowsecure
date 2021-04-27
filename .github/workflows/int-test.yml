@@ -32,4 +32,4 @@ jobs:
         uses: ./actions-nowsecure/.github/actions/schema-validator
         with:
           MACHINEUSER_GITHUB_TOKEN: ${{ secrets.MACHINEUSER_GITHUB_TOKEN }}
-          INPUT_DATA: $(cat ./actions-nowsecure/out.json)
+          INPUT_DATA: ./actions-nowsecure/out.json

@@ -1,8 +1,0 @@
-{
-  "6b2a7a6d-a7e5-48a0-b8c9-ddbbf9b2038d": {
-    "title": "awesome",
-    "description": "The Local Authentication library was found included in your application binary. At worst, it is being used for biometric authentication that is easily bypassed by someone with access to the device. At best, it is extraneous functionality that should not be included in the app as a best practice.",
-    "recommendation": "Consider",
-    "severity": ""
-  }
-}

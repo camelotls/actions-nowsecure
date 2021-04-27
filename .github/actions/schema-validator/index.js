@@ -25,7 +25,7 @@ const nowSecureIssueSchema = {
                     "type": "string"
                 }
             },
-            "required": ["key", "title", "description", "recommendation", "severity"]
+            "required": ["key", "title", "description", "severity"]
         }
    },
     "required": true,

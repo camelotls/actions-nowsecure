@@ -23,9 +23,15 @@ const nowSecureIssueSchema = {
                 },
                 "severity": {
                     "type": "string"
+                },
+                "assessmentVersion": {
+                    "type": "string"
+                },
+                "platform": {
+                    "type": "string"
                 }
             },
-            "required": ["key", "title", "description", "severity"]
+            "required": ["key", "title", "description", "severity", "assessmentVersion", "platform"]
         }
    },
     "required": true,

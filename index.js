@@ -124,13 +124,13 @@ const startAnalysis = async () => {
       const version = issue.platform === 'ios' ? assessmentVersion[0].platform.latestVersion : assessmentVersion[1].platform.latestVersion;
       const singleIssueData = {
         [uuid]: {
-          key: issue.key,
-          title: issue.title,
-          description: issue.description,
-          recommendation: issue.recommendation,
-          severity: issue.severity,
-          assessmentVersion: version,
-          platform: issue.platform
+          key: issue.key || '',
+          title: issue.title || '',
+          description: issue.description || '',
+          recommendation: issue.recommendation || '',
+          severity: issue.severity || '',
+          assessmentVersion: version || '',
+          platform: issue.platform || ''
         }
       };
 

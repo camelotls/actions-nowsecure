@@ -2,6 +2,7 @@
 
 ## Workflow Status
 ![Build Status](https://github.com/camelotls/actions-nowsecure/workflows/Unit%20Tests/badge.svg)
+![Build Status](https://github.com/camelotls/actions-nowsecure/workflows/Int%20Tests/badge.svg)
 ![Build Status](https://github.com/camelotls/actions-nowsecure/workflows/Lint%20Code%20Base/badge.svg)
 ![Build Status](https://github.com/camelotls/actions-nowsecure/workflows/ESLinter/badge.svg)
 ![Build Status](https://github.com/camelotls/actions-nowsecure/workflows/CodeQL/badge.svg)

@@ -39,7 +39,6 @@ const nowSecureIssueSchema = {
 }
 
 const jsonValidator = new Validator();
-
 beautifiedInputData = dirtyJSON.parse(inputData);
 
 try {

@@ -55,7 +55,6 @@ try {
         process.exit(1)
     }
 }
-catch(e)
-    {
-        console.log(e)
-    }
+catch(e) {
+    console.log(e)
+}

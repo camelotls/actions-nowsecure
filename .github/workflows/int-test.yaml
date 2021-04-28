@@ -1,0 +1,33 @@
+name: Int Tests
+
+on:
+  pull_request
+
+jobs:
+  int-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          path: actions-nowsecure
+      - name: Use Node.js 12.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - name: Execute Nowsecure action
+        id: nowsecure_action
+        uses: ./actions-nowsecure/
+        with:
+          PLATFORMS: 'ios,android'
+          NOWSECURE_ACCESS_TOKEN: ${{ secrets.NOWSECURE_ACCESS_TOKEN }}
+          IOS_PACKAGE: 'co.uk.camelot'
+          ANDROID_PACKAGE: 'uk.co.theofficialnationallotteryapp.android.play'
+          NOWSECURE_GROUP_ID: ${{ secrets.UK_NOWSECURE_GROUP_ID }}
+          SEVERITY_LIST: 'high,medium,low'
+      - name: Run Int Tests
+        uses: ./actions-nowsecure/.github/actions/schema-validator
+        with:
+          MACHINEUSER_GITHUB_TOKEN: ${{ secrets.MACHINEUSER_GITHUB_TOKEN }}
+          INPUT_DATA: ${{ steps.nowsecure_action.outputs.nowsecureReportData }}

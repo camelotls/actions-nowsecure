@@ -1,0 +1,10 @@
+name: "Schema Validator"
+description: "Validate the Schema of Nowsecure Report"
+inputs:
+  MACHINEUSER_GITHUB_TOKEN:
+    description: "Github action bot token"
+  INPUT_DATA:
+    description: "json report from nowsecure"
+runs:
+  using: "docker"
+  image: "Dockerfile"

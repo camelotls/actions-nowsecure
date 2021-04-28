@@ -16,18 +16,18 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 12.x
-      - name: Execute Nowsecure action
-        id: nowsecure_action
-        uses: ./actions-nowsecure/
-        with:
-          PLATFORMS: 'ios,android'
-          NOWSECURE_ACCESS_TOKEN: ${{ secrets.NOWSECURE_ACCESS_TOKEN }}
-          IOS_PACKAGE: 'co.uk.camelot'
-          ANDROID_PACKAGE: 'uk.co.theofficialnationallotteryapp.android.play'
-          NOWSECURE_GROUP_ID: ${{ secrets.UK_NOWSECURE_GROUP_ID }}
-          SEVERITY_LIST: 'high,medium,low'
+#      - name: Execute Nowsecure action
+#        id: nowsecure_action
+#        uses: ./actions-nowsecure/
+#        with:
+#          PLATFORMS: 'ios,android'
+#          NOWSECURE_ACCESS_TOKEN: ${{ secrets.NOWSECURE_ACCESS_TOKEN }}
+#          IOS_PACKAGE: 'co.uk.camelot'
+#          ANDROID_PACKAGE: 'uk.co.theofficialnationallotteryapp.android.play'
+#          NOWSECURE_GROUP_ID: ${{ secrets.UK_NOWSECURE_GROUP_ID }}
+#          SEVERITY_LIST: 'high,medium,low'
       - name: Run Int Tests
         uses: ./actions-nowsecure/.github/actions/schema-validator
         with:
           MACHINEUSER_GITHUB_TOKEN: ${{ secrets.MACHINEUSER_GITHUB_TOKEN }}
-          INPUT_DATA: ${{ steps.nowsecure_action.outputs.nowsecureReportData }}
+          INPUT_DATA: "{\n  \"c12763e6-d996-4233-bdb3-2c485a1e339\": {\n    \"key\": \"certificate_validation\",\n    \"title\": \"Failure to Validate Certificate Authority Allows Data to be Exposed and Modified Remotely\",\n    \"description\": \"The application does not properly validate the Certificate Authority (CA) for the implemented certificate. CAs vouch for the authenticity of a website by verifying the registration of the site's domain name and the company/organization behind it. If the certificate's CA data is not properly validated, a malicious actor could create an invalid certificate by utilizing any CA, effectively making the app susceptible to an Man-in-the-Middle attack. This type of attack gives the culprit the ability to capture, view, and modify traffic sent and received between the app and the server. Impacted URLs are listed in the table below.\",\n    \"recommendation\": \"\",\n    \"severity\": \"high\",\n    \"assessmentVersion\": \"\",\n    \"platform\": \"\"\n  }"

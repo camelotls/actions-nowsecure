@@ -129,7 +129,7 @@ const startAnalysis = async () => {
           description: issue.description || '',
           recommendation: issue.recommendation || '',
           severity: issue.severity || '',
-          assessmentVersion: version || '',
+          assessmentVersion: version,
           platform: issue.platform || ''
         }
       };

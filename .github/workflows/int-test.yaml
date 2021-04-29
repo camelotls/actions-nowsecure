@@ -26,8 +26,8 @@ jobs:
           ANDROID_PACKAGE: 'uk.co.theofficialnationallotteryapp.android.play'
           NOWSECURE_GROUP_ID: ${{ secrets.UK_NOWSECURE_GROUP_ID }}
           SEVERITY_LIST: 'high,medium,low'
-      - name: Run Int Tests
+      - name: Execute Integration Tests
         uses: ./actions-nowsecure/.github/actions/schema-validator
         with:
           MACHINEUSER_GITHUB_TOKEN: ${{ secrets.MACHINEUSER_GITHUB_TOKEN }}
-          INPUT_DATA: ${{ steps.nowsecure_action.outputs.nowsecureReportData }}
+          INPUT_DATA: ::add-mask::${{ steps.nowsecure_action.outputs.nowsecureReportData }}

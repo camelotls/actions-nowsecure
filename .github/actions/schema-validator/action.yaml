@@ -4,7 +4,7 @@ inputs:
   MACHINEUSER_GITHUB_TOKEN:
     description: "Github action bot token"
   INPUT_DATA:
-    description: "json report from nowsecure"
+    description: "JSON report from nowsecure"
 runs:
   using: "docker"
   image: "Dockerfile"

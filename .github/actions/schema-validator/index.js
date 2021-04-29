@@ -39,18 +39,17 @@ const nowSecureIssueSchema = {
 }
 
 const jsonValidator = new Validator();
-beautifiedInputData = dirtyJSON.parse(inputData);
+const beautifiedInputData = dirtyJSON.parse(inputData);
 
 try {
     const beautifiedInputDataStringified = JSON.stringify(beautifiedInputData);
 
-    const isValidSchema = (jsonValidator.validate(JSON.parse(beautifiedInputDataStringified), nowSecureIssueSchema).errors.length === 0);
+    const isValidSchema = jsonValidator.validate(JSON.parse(beautifiedInputDataStringified), nowSecureIssueSchema).errors.length === 0;
 
     if (isValidSchema) {
-        console.log('Nowsecure Schema is valid')
+        console.log('NowSecure schema validation has succeeded.')
     } else {
-        console.log('Validation of Nowsecure Schema has failed')
-        console.log(jsonValidator.validate(JSON.parse(beautifiedInputDataStringified), nowSecureIssueSchema));
+        console.log('Validation of Nowsecure Schema has failed. ' + jsonValidator.validate(JSON.parse(beautifiedInputDataStringified), nowSecureIssueSchema));
         process.exit(1)
     }
 }

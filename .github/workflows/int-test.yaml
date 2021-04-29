@@ -30,4 +30,4 @@ jobs:
         uses: ./actions-nowsecure/.github/actions/schema-validator
         with:
           MACHINEUSER_GITHUB_TOKEN: ${{ secrets.MACHINEUSER_GITHUB_TOKEN }}
-          INPUT_DATA: ::add-mask::${{ steps.nowsecure_action.outputs.nowsecureReportData }}
+          INPUT_DATA: "::add-mask::${{ steps.nowsecure_action.outputs.nowsecureReportData }}"

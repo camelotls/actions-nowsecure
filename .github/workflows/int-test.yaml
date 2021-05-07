@@ -16,7 +16,6 @@ jobs:
         with:
           node-version: 12.x
       - name: Exporting ID Schema
-        id: ID
         run: export ID=basic
       - name: Execute Nowsecure action
         id: nowsecure_action

@@ -1,13 +1,13 @@
 const core = require('@actions/core');
 const dirtyJSON = require('dirty-json');
 const Validator = require('jsonschema').Validator;
-const schemaType = core.getInput('ID') || process.env.ID;
+const schemaType = process.env.ID;
 const inputData = core.getInput('INPUT_DATA') || process.env.INPUT_DATA;
 const { nowSecureSchema, nowSecureExtraFieldsSchema } = require('./schemaTemplate');
 const schemaArray = [];
 
 schemaArray.push(nowSecureSchema, nowSecureExtraFieldsSchema);
-
+console.log("Schema type is " + schemaType);
 schemaArray.forEach( schema => {
 
   if(dirtyJSON.parse(schema.id) === schemaType) {

@@ -2,7 +2,7 @@ const core = require('@actions/core');
 const dirtyJSON = require('dirty-json');
 const Validator = require('jsonschema').Validator;
 const inputData = core.getInput('INPUT_DATA') || process.env.INPUT_DATA;
-const  {nowSecureSchema, nowSecureExtraFieldsSchema } = require('../schema-validator/schemaTemplate');
+const  {nowSecureSchema, nowSecureExtraFieldsSchema } = require('./schemaTemplate');
 const schemaArray = [];
 
 schemaArray.push(nowSecureSchema, nowSecureExtraFieldsSchema);

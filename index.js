@@ -117,6 +117,7 @@ const startAnalysis = async () => {
     });
   }
   // construct the object acting as an input for the Jira Server Integration Action
+
   const reportOutput = {};
   filteredReportedIssues.forEach(filteredIssue => {
     filteredIssue.forEach(issue => {

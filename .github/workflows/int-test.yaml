@@ -1,12 +1,11 @@
 name: Int Tests
 
 on:
-  pull_request
+  push
 
 jobs:
-  int-tests:
+  int-test-basic-schema:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -16,9 +15,12 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 12.x
+      - name: Exporting ID Schema
+        id: ID
+        run: export ID=extra
       - name: Execute Nowsecure action
         id: nowsecure_action
-        uses: ./actions-nowsecure/
+        uses: ./
         with:
           PLATFORMS: 'ios,android'
           NOWSECURE_ACCESS_TOKEN: ${{ secrets.NOWSECURE_ACCESS_TOKEN }}
@@ -26,10 +28,40 @@ jobs:
           ANDROID_PACKAGE: 'uk.co.theofficialnationallotteryapp.android.play'
           NOWSECURE_GROUP_ID: ${{ secrets.UK_NOWSECURE_GROUP_ID }}
           SEVERITY_LIST: 'high,medium,low'
-      - name: Execute Integration Tests
-        env:
-          NOWSECURE_REPORT= ${{ steps.nowsecure_action.outputs.nowsecureReportData }}
-        uses: ./actions-nowsecure/.github/actions/schema-validator
+      - name: Integration Test Basic Schema
+        uses: ./.github/actions/schema-validator
         with:
           MACHINEUSER_GITHUB_TOKEN: ${{ secrets.MACHINEUSER_GITHUB_TOKEN }}
-          INPUT_DATA: "::add-mask::$NOWSECURE_REPORT"
+          INPUT_DATA: ${{ steps.nowsecure_action.outputs.nowsecureReportData }}
+
+  int-test-extra-fields-schema:
+   runs-on: ubuntu-latest
+   steps:
+     - name: Checkout
+       uses: actions/checkout@v2
+       with:
+         path: actions-nowsecure
+     - name: Use Node.js 12.x
+       uses: actions/setup-node@v1
+       with:
+         node-version: 12.x
+     - name: Exporting ID Schema
+       id: ID
+       run: export ID=extra
+     - name: Execute Nowsecure action
+       id: nowsecure_action
+       uses: ./
+       with:
+         PLATFORMS: 'ios,android'
+         NOWSECURE_ACCESS_TOKEN: ${{ secrets.NOWSECURE_ACCESS_TOKEN }}
+         REPORT_FIELDS: 'kind,category'
+         IOS_PACKAGE: 'co.uk.camelot'
+         ANDROID_PACKAGE: 'uk.co.theofficialnationallotteryapp.android.play'
+         NOWSECURE_GROUP_ID: ${{ secrets.UK_NOWSECURE_GROUP_ID }}
+         SEVERITY_LIST: 'high,medium,low'
+     - name: Integration Test Basic Schema
+       uses: ./.github/actions/schema-validator
+       with:
+         MACHINEUSER_GITHUB_TOKEN: ${{ secrets.MACHINEUSER_GITHUB_TOKEN }}
+         INPUT_DATA: ${{ steps.nowsecure_action.outputs.nowsecureReportData }}
+

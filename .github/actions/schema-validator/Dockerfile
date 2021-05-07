@@ -1,10 +1,8 @@
 FROM node:12.9.0
 
-COPY index.js .
-COPY schemaTemplate.js .
-COPY package.json .
-COPY package-lock.json .
-
+COPY index.js package.json package-lock.json ./
+COPY schemaTemplate.js ./schemaTemplate.js
 RUN npm install
 
 ENTRYPOINT ["node", "/index.js"]
+

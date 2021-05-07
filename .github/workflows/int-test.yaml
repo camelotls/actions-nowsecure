@@ -6,6 +6,8 @@ on:
 jobs:
   int-test-basic-schema:
     runs-on: ubuntu-latest
+    env:
+      ID: basic
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -15,8 +17,6 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 12.x
-      - name: Exporting ID Schema
-        run: export ID=basic
       - name: Execute Nowsecure action
         id: nowsecure_action
         uses: ./actions-nowsecure/
@@ -35,6 +35,8 @@ jobs:
 
   int-test-extra-fields-schema:
    runs-on: ubuntu-latest
+   env:
+     ID: extra
    steps:
      - name: Checkout
        uses: actions/checkout@v2
@@ -44,9 +46,6 @@ jobs:
        uses: actions/setup-node@v1
        with:
          node-version: 12.x
-     - name: Exporting ID Schema
-       id: ID
-       run: export ID=extra
      - name: Execute Nowsecure action
        id: nowsecure_action
        uses: ./actions-nowsecure/

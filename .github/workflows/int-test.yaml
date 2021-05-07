@@ -29,7 +29,7 @@ jobs:
           NOWSECURE_GROUP_ID: ${{ secrets.UK_NOWSECURE_GROUP_ID }}
           SEVERITY_LIST: 'high,medium,low'
       - name: Integration Test Basic Schema
-        uses: ./.github/actions/schema-validator
+        uses: ./actions-nowsecure/.github/actions/schema-validator
         with:
           MACHINEUSER_GITHUB_TOKEN: ${{ secrets.MACHINEUSER_GITHUB_TOKEN }}
           INPUT_DATA: ${{ steps.nowsecure_action.outputs.nowsecureReportData }}
@@ -60,7 +60,7 @@ jobs:
          NOWSECURE_GROUP_ID: ${{ secrets.UK_NOWSECURE_GROUP_ID }}
          SEVERITY_LIST: 'high,medium,low'
      - name: Integration Test Basic Schema
-       uses: ./.github/actions/schema-validator
+       uses: ./actions-nowsecure/.github/actions/schema-validator
        with:
          MACHINEUSER_GITHUB_TOKEN: ${{ secrets.MACHINEUSER_GITHUB_TOKEN }}
          INPUT_DATA: ${{ steps.nowsecure_action.outputs.nowsecureReportData }}

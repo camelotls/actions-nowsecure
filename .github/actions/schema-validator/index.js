@@ -9,6 +9,7 @@ schemaArray.push(nowSecureSchema, nowSecureExtraFieldsSchema);
 
 schemaArray.forEach( schema => {
   if(dirtyJSON.parse(schema.id) === process.env.ID) {
+    console.log(process.env.ID)
 
     const jsonValidator = new Validator();
     const beautifiedInputData = dirtyJSON.parse(inputData);
@@ -21,7 +22,7 @@ schemaArray.forEach( schema => {
       if (isValidSchema) {
         console.log('NowSecure schema validation has succeeded.')
       } else {
-        console.log('Validation of Nowsecure Schema has failed. ' + jsonValidator.validate(JSON.parse(beautifiedInputDataStringified), schema));
+        console.log('Validation of Nowsecure schema has failed. ' + jsonValidator.validate(JSON.parse(beautifiedInputDataStringified), schema));
         process.exit(1)
       }
     } catch (e) {

@@ -17,7 +17,7 @@ jobs:
           node-version: 12.x
       - name: Exporting ID Schema
         id: ID
-        run: export ID=extra
+        run: export ID=basic
       - name: Execute Nowsecure action
         id: nowsecure_action
         uses: ./actions-nowsecure/

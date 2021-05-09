@@ -47,7 +47,7 @@ jobs:
        with:
          node-version: 12.x
      - name: Execute Nowsecure action
-       id: ::add-mask::nowsecure_action
+       id: nowsecure_action
        uses: ./actions-nowsecure/
        with:
          PLATFORMS: 'ios,android'
@@ -57,9 +57,11 @@ jobs:
          ANDROID_PACKAGE: 'uk.co.theofficialnationallotteryapp.android.play'
          NOWSECURE_GROUP_ID: ${{ secrets.UK_NOWSECURE_GROUP_ID }}
          SEVERITY_LIST: 'high,medium,low'
+      env:
+        MASK_OUTPUT: ::add-mask::nowsecure_action
      - name: Integration Test Basic Schema
        uses: ./actions-nowsecure/.github/actions/schema-validator
        with:
          MACHINEUSER_GITHUB_TOKEN: ${{ secrets.MACHINEUSER_GITHUB_TOKEN }}
-         INPUT_DATA: ${{ steps.nowsecure_action.outputs.nowsecureReportData }}
+         INPUT_DATA: ${{ steps.${MASK_OUTPUT}.outputs.nowsecureReportData }}
 

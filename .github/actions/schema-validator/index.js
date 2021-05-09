@@ -7,7 +7,6 @@ const { nowSecureSchema, nowSecureExtraFieldsSchema } = require('./schemaTemplat
 const schemaArray = [];
 
 schemaArray.push(nowSecureSchema, nowSecureExtraFieldsSchema);
-console.log("Schema type is " + schemaType);
 schemaArray.forEach( schema => {
 
   if(dirtyJSON.parse(schema.id) === schemaType) {

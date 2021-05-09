@@ -47,7 +47,7 @@ jobs:
        with:
          node-version: 12.x
      - name: Execute Nowsecure action
-       id: nowsecure_action
+       id: ::add-mask::nowsecure_action
        uses: ./actions-nowsecure/
        with:
          PLATFORMS: 'ios,android'

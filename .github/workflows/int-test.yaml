@@ -21,7 +21,7 @@ jobs:
         id: nowsecure_action
         uses: ./actions-nowsecure/
         with:
-          PLATFORMS: 'ios,android'
+          PLATFORMS: 'ios'
           NOWSECURE_ACCESS_TOKEN: ${{ secrets.NOWSECURE_ACCESS_TOKEN }}
           IOS_PACKAGE: 'com.saucelabs.SwagLabsMobileApp'
           NOWSECURE_GROUP_ID: ${{ secrets.SAMPLE_NOWSECURE_GROUP_ID }}
@@ -49,7 +49,7 @@ jobs:
        id: nowsecure_action
        uses: ./actions-nowsecure/
        with:
-         PLATFORMS: 'ios,android'
+         PLATFORMS: 'ios'
          NOWSECURE_ACCESS_TOKEN: ${{ secrets.NOWSECURE_ACCESS_TOKEN }}
          REPORT_FIELDS: 'kind,category'
          IOS_PACKAGE: 'com.saucelabs.SwagLabsMobileApp'

@@ -55,9 +55,9 @@ jobs:
          IOS_PACKAGE: 'com.saucelabs.SwagLabsMobileApp'
          NOWSECURE_GROUP_ID: ${{ secrets.SAMPLE_NOWSECURE_GROUP_ID }}
          SEVERITY_LIST: 'high,medium,low'
-     - name: Integration Test Basic Schema
+     - name: Integration Test Extra Schema
        uses: ./actions-nowsecure/.github/actions/schema-validator
        with:
          MACHINEUSER_GITHUB_TOKEN: ${{ secrets.MACHINEUSER_GITHUB_TOKEN }}
-         INPUT_DATA: ${{ steps.outputs.nowsecureReportData }}
+         INPUT_DATA: ${{ steps.nowsecure_action.outputs.nowsecureReportData }}
 

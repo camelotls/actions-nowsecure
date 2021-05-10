@@ -28,8 +28,6 @@ schemaArray.forEach( schema => {
     } catch (e) {
       console.log(e);
     }
-  } else {
-    console.log('Schema Type is not valid')
   }
 });
 

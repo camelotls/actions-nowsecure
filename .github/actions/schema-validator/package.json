@@ -4,7 +4,8 @@
   "description": "Small app to validate the Nowsecure schema",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "lint": "./node_modules/.bin/eslint"
   },
   "repository": {
     "type": "git",

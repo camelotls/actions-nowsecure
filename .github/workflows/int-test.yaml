@@ -1,4 +1,4 @@
-name: Int Tests
+name: Integration Tests
 
 on:
   pull_request:
@@ -31,7 +31,6 @@ jobs:
         with:
           MACHINEUSER_GITHUB_TOKEN: ${{ secrets.MACHINEUSER_GITHUB_TOKEN }}
           INPUT_DATA: ${{ steps.nowsecure_action.outputs.nowsecureReportData }}
-
   int-test-extra-fields-schema:
    runs-on: ubuntu-latest
    env:
@@ -60,4 +59,3 @@ jobs:
        with:
          MACHINEUSER_GITHUB_TOKEN: ${{ secrets.MACHINEUSER_GITHUB_TOKEN }}
          INPUT_DATA: ${{ steps.nowsecure_action.outputs.nowsecureReportData }}
-

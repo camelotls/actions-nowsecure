@@ -160,7 +160,6 @@ const startAnalysis = async () => {
       Object.assign(reportOutput, singleIssueData);
     });
   });
-
   // output the constructed object
   core.setOutput('nowsecureReportData', reportOutput);
 };

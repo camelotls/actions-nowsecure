@@ -1,7 +1,7 @@
 const core = require('@actions/core');
 const dirtyJSON = require('dirty-json');
 const { Validator } = require('jsonschema');
-let schemaType = process.env.ID;
+const schemaType = process.env.ID || 'basic';
 const inputData = core.getInput('INPUT_DATA') || process.env.INPUT_DATA;
 const { nowSecureSchema, nowSecureExtraFieldsSchema } = require('./schemaTemplate');
 const schemaArray = [];
@@ -10,10 +10,6 @@ schemaArray.push(
   nowSecureSchema,
   nowSecureExtraFieldsSchema
 );
-
-if (schemaType === undefined) {
-  schemaType = 'basic';
-}
 
 schemaArray.forEach((schema) => {
   if (dirtyJSON.parse(schema.id) === schemaType) {
@@ -29,7 +25,7 @@ schemaArray.forEach((schema) => {
       if (isValidSchema) {
         console.log('NowSecure schema validation has succeeded.');
       } else {
-        console.log(`Validation of NowSecure schema has failed.: ${jsonValidator.validate(
+        console.log(`Validation of NowSecure schema has failed: ${jsonValidator.validate(
                     JSON.parse(beautifiedInputDataStringified),
                     schema
                 )}`);

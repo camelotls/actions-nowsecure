@@ -117,6 +117,7 @@ const startAnalysis = async () => {
     });
   }
   // construct the object acting as an input for the Jira Server Integration Action
+
   const reportOutput = {};
   filteredReportedIssues.forEach(filteredIssue => {
     filteredIssue.forEach(issue => {
@@ -124,13 +125,13 @@ const startAnalysis = async () => {
       const version = issue.platform === 'ios' ? assessmentVersion[0].platform.latestVersion : assessmentVersion[1].platform.latestVersion;
       const singleIssueData = {
         [uuid]: {
-          key: issue.key,
-          title: issue.title,
-          description: issue.description,
-          recommendation: issue.recommendation,
-          severity: issue.severity,
+          key: issue.key || '',
+          title: issue.title || '',
+          description: issue.description || '',
+          recommendation: issue.recommendation || '',
+          severity: issue.severity || '',
           assessmentVersion: version,
-          platform: issue.platform
+          platform: issue.platform || ''
         }
       };
 
@@ -159,7 +160,6 @@ const startAnalysis = async () => {
       Object.assign(reportOutput, singleIssueData);
     });
   });
-
   // output the constructed object
   core.setOutput('nowsecureReportData', reportOutput);
 };

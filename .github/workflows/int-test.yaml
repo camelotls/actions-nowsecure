@@ -1,0 +1,61 @@
+name: Integration Tests
+
+on:
+  pull_request:
+
+jobs:
+  int-test-basic-schema:
+    runs-on: ubuntu-latest
+    env:
+      ID: basic
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          path: actions-nowsecure
+      - name: Use Node.js 12.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - name: Execute Nowsecure action
+        id: nowsecure_action
+        uses: ./actions-nowsecure/
+        with:
+          PLATFORMS: 'ios'
+          NOWSECURE_ACCESS_TOKEN: ${{ secrets.NOWSECURE_ACCESS_TOKEN }}
+          IOS_PACKAGE: 'com.saucelabs.SwagLabsMobileApp'
+          NOWSECURE_GROUP_ID: ${{ secrets.SAMPLE_NOWSECURE_GROUP_ID }}
+          SEVERITY_LIST: 'high,medium,low'
+      - name: Integration Test Basic Schema
+        uses: ./actions-nowsecure/.github/actions/schema-validator
+        with:
+          MACHINEUSER_GITHUB_TOKEN: ${{ secrets.MACHINEUSER_GITHUB_TOKEN }}
+          INPUT_DATA: ${{ steps.nowsecure_action.outputs.nowsecureReportData }}
+  int-test-extra-fields-schema:
+   runs-on: ubuntu-latest
+   env:
+     ID: extra
+   steps:
+     - name: Checkout
+       uses: actions/checkout@v2
+       with:
+         path: actions-nowsecure
+     - name: Use Node.js 12.x
+       uses: actions/setup-node@v1
+       with:
+         node-version: 12.x
+     - name: Execute Nowsecure action
+       id: nowsecure_action
+       uses: ./actions-nowsecure/
+       with:
+         PLATFORMS: 'ios'
+         NOWSECURE_ACCESS_TOKEN: ${{ secrets.NOWSECURE_ACCESS_TOKEN }}
+         REPORT_FIELDS: 'kind,category'
+         IOS_PACKAGE: 'com.saucelabs.SwagLabsMobileApp'
+         NOWSECURE_GROUP_ID: ${{ secrets.SAMPLE_NOWSECURE_GROUP_ID }}
+         SEVERITY_LIST: 'high,medium,low'
+     - name: Integration Test Extra Schema
+       uses: ./actions-nowsecure/.github/actions/schema-validator
+       with:
+         MACHINEUSER_GITHUB_TOKEN: ${{ secrets.MACHINEUSER_GITHUB_TOKEN }}
+         INPUT_DATA: ${{ steps.nowsecure_action.outputs.nowsecureReportData }}

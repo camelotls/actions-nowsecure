@@ -22,4 +22,6 @@ jobs:
           npm run lint config/**
           npm run lint helpers/**
           npm run lint test/**
+          cd .github/actions/schema-validator
+          npm run lint *.js
 

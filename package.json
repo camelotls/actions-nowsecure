@@ -13,6 +13,7 @@
   "devDependencies": {
     "@actions/core": "1.2.6",
     "assert": "2.0.0",
+    "bunyan": "^1.8.15",
     "chai": "4.3.4",
     "eslint": "7.23.0",
     "eslint-config-standard": "16.0.2",

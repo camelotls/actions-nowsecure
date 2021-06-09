@@ -2,6 +2,8 @@ const core = require('@actions/core');
 const { v4 } = require('uuid');
 const { SEVERITIES } = require('./config/config');
 const _ = require('lodash');
+const bunyan = require('bunyan');
+const log = bunyan.createLogger({ name: 'actions-jira-integration' });
 
 const nowsecure = require('./helpers/nowsecure-helpers');
 const platforms = core.getInput('PLATFORMS').split(',') || process.env.PLATFORMS.split(',');
@@ -11,7 +13,7 @@ let severityListSplit;
 if (severityList !== undefined) {
   severityListSplit = severityList.split(',').map((item) => item.trim());
 } else {
-  console.log('SEVERITY_LIST has not been provided so all the severities will be fetched...');
+  log.info('SEVERITY_LIST has not been provided so all the severities will be fetched...');
   severityListSplit = SEVERITIES.LIST.split(',');
 }
 const extraReportFields = (core.getInput('REPORT_FIELDS') || process.env.REPORT_FIELDS) ? core.getInput('REPORT_FIELDS').split(',') || process.env.REPORT_FIELDS.split(',') : '';
@@ -37,12 +39,12 @@ const startAnalysis = async () => {
   });
 
   for (const platform of platforms) {
-    console.log(`Retrieving the assessment for platform ${platform}...`);
+    log.info(`Retrieving the assessment for platform ${platform}...`);
     const assessment = await nowsecure.retrieveAssessment(platform);
     assessments.push(assessment);
 
     if (assessment !== null || assessment !== undefined) {
-      console.log(`The assessment for platform ${platform} was retrieved successfully!`);
+      log.info(`The assessment for platform ${platform} was retrieved successfully!`);
     }
   }
 
@@ -60,13 +62,13 @@ const startAnalysis = async () => {
     const platform = task.platform.name;
     const taskID = task.platform.latestTaskID;
 
-    console.log(`Retrieving the version name associated with the ${platform} assessment...`);
+    log.info(`Retrieving the version name associated with the ${platform} assessment...`);
     const report = await nowsecure.retrieveAssessmentReport(platform, taskID);
     if (report.statusCode !== 200) {
-      console.log(`Assessment's report cannot be retrieved for platform ${platform}: ${report.body.message}`);
+      log.info(`Assessment's report cannot be retrieved for platform ${platform}: ${report.body.message}`);
     } else {
       if (_.isEmpty(report.body.yaap_filtered.result)) {
-        console.log(`Assessment is currently running or Assessment's report is Incomplete for platform ${platform}. You may try to re-run the assessment...`);
+        log.info(`Assessment is currently running or Assessment's report is Incomplete for platform ${platform}. You may try to re-run the assessment...`);
         continue;
       } else {
         if (platform === 'ios') {
@@ -76,7 +78,7 @@ const startAnalysis = async () => {
         }
       }
     }
-    console.log('Version name retrieved successfully!');
+    log.info('Version name retrieved successfully!');
   }
 
   const resultList = [];
@@ -84,11 +86,11 @@ const startAnalysis = async () => {
   for (const [key, taskDetails] of Object.entries(tasks)) {
     const platform = taskDetails.platform.name;
 
-    console.log(`Retrieving the assessment results for platform ${platform}...`);
+    log.info(`Retrieving the assessment results for platform ${platform}...`);
 
     const results = await nowsecure.retrieveAssessmentResults(platform, taskDetails.platform.latestTaskID);
     if (results.statusCode !== 200) {
-      console.log(`Assessment's results cannot be retrieved for platform ${platform}: ${results.body.message}`);
+      log.info(`Assessment's results cannot be retrieved for platform ${platform}: ${results.body.message}`);
       continue;
     } else {
       if (!_.isEmpty(results.body)) {
@@ -100,10 +102,10 @@ const startAnalysis = async () => {
         resultList.push(platformInfusedResults);
 
         if (results !== null || results !== undefined) {
-          console.log(`The assessment results for platform ${platform} were retrieved successfully!`);
+          log.info(`The assessment results for platform ${platform} were retrieved successfully!`);
         }
       } else {
-        console.log(`The assessment results for platform ${platform} are empty...`);
+        log.info(`The assessment results for platform ${platform} are empty...`);
       }
     }
   }

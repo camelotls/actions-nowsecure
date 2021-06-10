@@ -1,4 +1,6 @@
 const https = require('https');
+const bunyan = require('bunyan');
+const log = bunyan.createLogger({ name: 'actions-jira-integration' });
 
 const GETRequestWrapper = async (requestName, address, accessToken, apiPath, parseJson) => {
   const options = {
@@ -37,7 +39,7 @@ const GETRequestWrapper = async (requestName, address, accessToken, apiPath, par
           resolve(obj);
         })
         .on('error', err => {
-          console.log(err);
+          log.warn(err);
           obj.body = err;
           obj.statusCode = response.statusCode;
           reject(obj);
@@ -46,7 +48,7 @@ const GETRequestWrapper = async (requestName, address, accessToken, apiPath, par
 
     request
       .on('error', err => {
-        console.log(`GET request ${requestName} encountered the following error: ${err.message}`);
+        log.warn(`GET request ${requestName} encountered the following error: ${err.message}`);
         reject(err);
       });
 

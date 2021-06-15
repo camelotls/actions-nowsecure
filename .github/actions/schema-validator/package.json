@@ -14,11 +14,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@actions/core": "1.2.6",
+    "@actions/core": "1.4.0",
     "@actions/github": "4.0.0"
   },
   "devDependencies": {
-    "bunyan": "^1.8.15",
+    "bunyan": "1.8.15",
     "dirty-json": "0.9.2",
     "jsonschema": "1.4.0"
   }

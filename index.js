@@ -3,7 +3,7 @@ const { v4 } = require('uuid');
 const { SEVERITIES } = require('./config/config');
 const _ = require('lodash');
 const bunyan = require('bunyan');
-const log = bunyan.createLogger({ name: 'actions-jira-integration' });
+const log = bunyan.createLogger({ name: 'actions-nowsecure' });
 
 const nowsecure = require('./helpers/nowsecure-helpers');
 const platforms = core.getInput('PLATFORMS').split(',') || process.env.PLATFORMS.split(',');

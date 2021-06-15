@@ -5,7 +5,7 @@ const _ = require('lodash');
 const bunyan = require('bunyan');
 const log = bunyan.createLogger({ name: 'actions-nowsecure' });
 
-const nowsecure = require('./helpers/nowsecure-helpers');
+const nowSecure = require('./helpers/nowsecure-helpers');
 const platforms = core.getInput('PLATFORMS').split(',') || process.env.PLATFORMS.split(',');
 const severityList = core.getInput('SEVERITY_LIST') || process.env.SEVERITY_LIST;
 let severityListSplit;
@@ -40,7 +40,7 @@ const startAnalysis = async () => {
 
   for (const platform of platforms) {
     log.info(`Retrieving the assessment for platform ${platform}...`);
-    const assessment = await nowsecure.retrieveAssessment(platform);
+    const assessment = await nowSecure.retrieveAssessment(platform);
     assessments.push(assessment);
 
     if (assessment !== null || assessment !== undefined) {
@@ -63,7 +63,7 @@ const startAnalysis = async () => {
     const taskID = task.platform.latestTaskID;
 
     log.info(`Retrieving the version name associated with the ${platform} assessment...`);
-    const report = await nowsecure.retrieveAssessmentReport(platform, taskID);
+    const report = await nowSecure.retrieveAssessmentReport(platform, taskID);
     if (report.statusCode !== 200) {
       log.info(`Assessment's report cannot be retrieved for platform ${platform}: ${report.body.message}`);
     } else {
@@ -88,7 +88,7 @@ const startAnalysis = async () => {
 
     log.info(`Retrieving the assessment results for platform ${platform}...`);
 
-    const results = await nowsecure.retrieveAssessmentResults(platform, taskDetails.platform.latestTaskID);
+    const results = await nowSecure.retrieveAssessmentResults(platform, taskDetails.platform.latestTaskID);
     if (results.statusCode !== 200) {
       log.info(`Assessment's results cannot be retrieved for platform ${platform}: ${results.body.message}`);
       continue;
@@ -146,7 +146,7 @@ const startAnalysis = async () => {
             extraFields = (issue.regulatory[regulation] === undefined) ? {
               [regulation]: 'No data retrieved'
             } : {
-              // expose the id and url which are built in the regulations under the regulatory field from Nowsecure
+              // expose the id and url which are built in the regulations under the regulatory field from NowSecure
               [`${regulation}-id`]: issue.regulatory[regulation][0].id,
               [`${regulation}-url`]: issue.regulatory[regulation][0].url
             };

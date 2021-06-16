@@ -1,7 +1,7 @@
 const core = require('@actions/core');
 
 const NOWSECURE = {
-  URI: 'lab-api.nowsecure.com',
+  URI: 'https://lab-api.nowsecure.com',
   ENDPOINTS: {
     ASSESSMENT: 'assessment',
     APPLICATION: 'app',

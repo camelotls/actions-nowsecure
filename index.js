@@ -6,10 +6,13 @@ const bunyan = require('bunyan');
 const log = bunyan.createLogger({ name: 'actions-nowsecure' });
 
 const nowSecure = require('./helpers/nowsecure-helpers');
-const platforms = core.getInput('PLATFORMS').split(',') || process.env.PLATFORMS.split(',');
-const severityList = core.getInput('SEVERITY_LIST') || process.env.SEVERITY_LIST;
-let severityListSplit;
+const report = require('./helpers/report');
 
+const platforms = (core.getInput('PLATFORMS').split(',') || process.env.PLATFORMS.split(',')).map(platform => platform.toLowerCase());
+const severityList = core.getInput('SEVERITY_LIST') || process.env.SEVERITY_LIST;
+const extractReport = (core.getInput('EXTRACT_REPORT') || process.env.EXTRACT_REPORT).toLowerCase() === 'true';
+
+let severityListSplit;
 if (severityList !== undefined) {
   severityListSplit = severityList.split(',').map((item) => item.trim());
 } else {
@@ -18,9 +21,9 @@ if (severityList !== undefined) {
 }
 const extraReportFields = (core.getInput('REPORT_FIELDS') || process.env.REPORT_FIELDS) ? core.getInput('REPORT_FIELDS').split(',') || process.env.REPORT_FIELDS.split(',') : '';
 const startAnalysis = async () => {
-  const assessments = [];
   const tasks = [];
   const assessmentVersion = [];
+  const assessmentReferences = new Map();
 
   platforms.forEach(platform => {
     tasks.push({
@@ -38,32 +41,28 @@ const startAnalysis = async () => {
     });
   });
 
-  for (const platform of platforms) {
-    log.info(`Retrieving the assessment for platform ${platform}...`);
-    const assessment = await nowSecure.retrieveAssessment(platform);
-    assessments.push(assessment);
-
-    if (assessment !== null || assessment !== undefined) {
-      log.info(`The assessment for platform ${platform} was retrieved successfully!`);
-    }
-  }
+  const assessments = await report.getAssessments(platforms, extractReport);
 
   for (const assessment of assessments) {
-    if (assessment[assessment.length - 1].platform === 'ios') {
-      tasks[0].platform.latestTaskID = assessment[assessment.length - 1].task;
-    }
+    const platform = assessment[assessment.length - 1].platform;
+    const platformIndex = platforms.indexOf(platform);
+    tasks[platformIndex].platform.latestTaskID = assessment[assessment.length - 1].task;
 
-    if (assessment[assessment.length - 1].platform === 'android') {
-      tasks[1].platform.latestTaskID = assessment[assessment.length - 1].task;
+    if (extractReport) {
+      log.info(`Retrieving the assessment reference for platform ${platform}...`);
+      assessmentReferences.set(platform, assessment[assessment.length - 1].ref);
+      log.info(`The assessment reference for platform ${platform} was retrieved successfully!`);
     }
   }
 
   for (const task of tasks) {
     const platform = task.platform.name;
     const taskID = task.platform.latestTaskID;
+    const platformIndex = platforms.indexOf(platform.toString());
 
     log.info(`Retrieving the version name associated with the ${platform} assessment...`);
     const report = await nowSecure.retrieveAssessmentReport(platform, taskID);
+
     if (report.statusCode !== 200) {
       log.info(`Assessment's report cannot be retrieved for platform ${platform}: ${report.body.message}`);
     } else {
@@ -71,11 +70,8 @@ const startAnalysis = async () => {
         log.info(`Assessment is currently running or Assessment's report is Incomplete for platform ${platform}. You may try to re-run the assessment...`);
         continue;
       } else {
-        if (platform === 'ios') {
-          assessmentVersion[0].platform.latestVersion = report.body.yaap_filtered.result.info[0].file_info.short_bundle_id;
-        } else {
-          assessmentVersion[1].platform.latestVersion = report.body.yaap_filtered.result.info[0].file_info.version_name;
-        }
+        // the key for the assessment version changes between different platforms
+        assessmentVersion[platformIndex].platform.latestVersion = platform === 'ios' ? report.body.yaap_filtered.result.info[0].file_info.short_bundle_id : report.body.yaap_filtered.result.info[0].file_info.version_name;
       }
     }
     log.info('Version name retrieved successfully!');
@@ -89,6 +85,7 @@ const startAnalysis = async () => {
     log.info(`Retrieving the assessment results for platform ${platform}...`);
 
     const results = await nowSecure.retrieveAssessmentResults(platform, taskDetails.platform.latestTaskID);
+
     if (results.statusCode !== 200) {
       log.info(`Assessment's results cannot be retrieved for platform ${platform}: ${results.body.message}`);
       continue;
@@ -96,9 +93,11 @@ const startAnalysis = async () => {
       if (!_.isEmpty(results.body)) {
         // eslint-disable-next-line prefer-const
         let platformInfusedResults = [];
+
         results.body.forEach(result => {
           platformInfusedResults.push(Object.assign(result, { platform: platform }));
         });
+
         resultList.push(platformInfusedResults);
 
         if (results !== null || results !== undefined) {
@@ -109,7 +108,7 @@ const startAnalysis = async () => {
       }
     }
   }
-  // fetch issues flagged with High | Medium | Low severity level
+
   const filteredReportedIssues = [];
   for (const severityIssue of severityListSplit) {
     resultList.forEach(result => {
@@ -118,13 +117,12 @@ const startAnalysis = async () => {
       }));
     });
   }
-  // construct the object acting as an input for the Jira Server Integration Action
 
   const reportOutput = {};
   filteredReportedIssues.forEach(filteredIssue => {
     filteredIssue.forEach(issue => {
       const uuid = v4().toString();
-      const version = issue.platform === 'ios' ? assessmentVersion[0].platform.latestVersion : assessmentVersion[1].platform.latestVersion;
+      const version = assessmentVersion[platforms.indexOf(issue.platform)].platform.latestVersion;
       const singleIssueData = {
         [uuid]: {
           key: issue.key || '',
@@ -162,7 +160,14 @@ const startAnalysis = async () => {
       Object.assign(reportOutput, singleIssueData);
     });
   });
-  // output the constructed object
+
+  if (extractReport) {
+    for (const [key, value] of assessmentReferences.entries()) {
+      log.info(`Generating the latest pdf report for ${key} platform...`);
+      report.generateReport(key, value);
+    }
+  }
+
   core.setOutput('nowsecureReportData', reportOutput);
 };
 

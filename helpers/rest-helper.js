@@ -1,6 +1,6 @@
 const got = require('got');
 const bunyan = require('bunyan');
-const log = bunyan.createLogger({ name: 'actions-jira-integration' });
+const log = bunyan.createLogger({ name: 'actions-nowsecure' });
 
 const GETRequestWrapper = async (requestName, address, accessToken, apiPath) => {
   try {

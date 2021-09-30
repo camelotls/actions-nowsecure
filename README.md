@@ -136,7 +136,7 @@ jobs:
               with:
                    JIRA_USER: ${{ secrets.JIRA_USER }}
                    JIRA_PASSWORD: ${{ secrets.JIRA_PASSWORD }}
-                   INPUT_JSON: ${{ steps.nowsecure_action.outputs.nowsecureReportData }}
+                   INPUT_JSON: './nowsecure-report.json'
                    JIRA_PROJECT: DUMMY
                    JIRA_URI: 'jira.endpoint'
                    REPORT_INPUT_KEYS: |

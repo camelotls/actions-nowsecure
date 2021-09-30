@@ -30,7 +30,7 @@ jobs:
         uses: ./actions-nowsecure/.github/actions/schema-validator
         with:
           MACHINEUSER_GITHUB_TOKEN: ${{ secrets.MACHINEUSER_GITHUB_TOKEN }}
-          INPUT_DATA: ${{ steps.nowsecure_action.outputs.nowsecureReportData }}
+          INPUT_DATA: './nowsecure-report.json'
   int-test-extra-fields-schema:
    runs-on: ubuntu-latest
    env:
@@ -58,4 +58,4 @@ jobs:
        uses: ./actions-nowsecure/.github/actions/schema-validator
        with:
          MACHINEUSER_GITHUB_TOKEN: ${{ secrets.MACHINEUSER_GITHUB_TOKEN }}
-         INPUT_DATA: ${{ steps.nowsecure_action.outputs.nowsecureReportData }}
+         INPUT_DATA: './nowsecure-report.json'

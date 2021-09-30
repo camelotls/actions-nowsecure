@@ -169,7 +169,7 @@ const startAnalysis = async () => {
     }
   }
   try {
-    fs.writeFileSync('nowsecure-report.json', reportOutput, 'utf8');
+    fs.writeFileSync('nowsecure-report.json', JSON.stringify(reportOutput), 'utf8');
   } catch (e) {
     log.warn(e);
   }

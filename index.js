@@ -1,6 +1,7 @@
 const core = require('@actions/core');
 const { v4 } = require('uuid');
 const { SEVERITIES } = require('./config/config');
+const fs = require('fs');
 const _ = require('lodash');
 const bunyan = require('bunyan');
 const log = bunyan.createLogger({ name: 'actions-nowsecure' });
@@ -167,8 +168,11 @@ const startAnalysis = async () => {
       report.generateReport(key, value);
     }
   }
-
-  core.setOutput('nowsecureReportData', reportOutput);
+  try {
+    fs.writeFileSync('nowsecure-report.json', reportOutput, 'utf8');
+  } catch (e) {
+    log.warn(e);
+  }
 };
 
 (async () => {

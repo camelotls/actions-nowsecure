@@ -23,7 +23,7 @@ const getAssessments = async (platforms, extractReport) => {
 };
 
 const generateReport = (platform, assessmentReference) => {
-  utils.shellExec(`curl -o ${platform}.pdf -H 'Authorization: Bearer ${NOWSECURE.ACCESS_TOKEN}' 'https://lab-api.nowsecure.com/assessment/${assessmentReference}/report.pdf'`);
+  utils.shellExec(`curl -k -o ${platform}.pdf -H 'Authorization: Bearer ${NOWSECURE.ACCESS_TOKEN}' 'https://lab-api.nowsecure.com/assessment/${assessmentReference}/report.pdf'`);
 };
 
 module.exports = { getAssessments, generateReport };

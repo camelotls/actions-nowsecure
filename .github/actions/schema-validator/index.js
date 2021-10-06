@@ -1,5 +1,6 @@
 const core = require('@actions/core');
 const dirtyJSON = require('dirty-json');
+const fs = require('fs');
 const { Validator } = require('jsonschema');
 const schemaType = process.env.ID || 'basic';
 const inputData = core.getInput('INPUT_DATA') || process.env.INPUT_DATA;
@@ -13,10 +14,12 @@ schemaArray.push(
   nowSecureExtraFieldsSchema
 );
 
+const reportOutput = fs.readFileSync(inputData, 'utf8');
+
 schemaArray.forEach((schema) => {
   if (dirtyJSON.parse(schema.id) === schemaType) {
     const jsonValidator = new Validator();
-    const beautifiedInputData = dirtyJSON.parse(inputData);
+    const beautifiedInputData = dirtyJSON.parse(reportOutput);
     try {
       const beautifiedInputDataStringified = JSON.stringify(beautifiedInputData);
       const isValidSchema = jsonValidator.validate(

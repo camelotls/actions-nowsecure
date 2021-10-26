@@ -1,26 +1,20 @@
-const core = require('@actions/core');
 const { v4 } = require('uuid');
-const { SEVERITIES } = require('./config/config');
+const { SEVERITIES, LOGGER } = require('./config/config');
+const { getInput } = require('./helpers/utils');
 const fs = require('fs');
 const _ = require('lodash');
 const bunyan = require('bunyan');
-const log = bunyan.createLogger({ name: 'actions-nowsecure' });
+const log = bunyan.createLogger({ name: LOGGER.NAME });
 
 const nowSecure = require('./helpers/nowsecure-helpers');
 const report = require('./helpers/report');
 
-const platforms = (core.getInput('PLATFORMS').split(',') || process.env.PLATFORMS.split(',')).map(platform => platform.toLowerCase());
-const severityList = core.getInput('SEVERITY_LIST') || process.env.SEVERITY_LIST;
-const extractReport = (core.getInput('EXTRACT_REPORT') || process.env.EXTRACT_REPORT).toLowerCase() === 'true';
+const platforms = getInput('PLATFORMS').split(',').map(platform => platform.toLowerCase());
+const severityList = getInput('SEVERITY_LIST');
+const extractReport = JSON.parse(getInput('EXTRACT_REPORT').toLowerCase());
+const extraReportFields = getInput('REPORT_FIELDS') ? getInput('REPORT_FIELDS').split(',') : '';
+const severityListSplit = (!severityList) ? severityList.split(',').map((item) => item.trim()) : SEVERITIES.LIST.split(',');
 
-let severityListSplit;
-if (severityList !== undefined) {
-  severityListSplit = severityList.split(',').map((item) => item.trim());
-} else {
-  log.info('SEVERITY_LIST has not been provided so all the severities will be fetched...');
-  severityListSplit = SEVERITIES.LIST.split(',');
-}
-const extraReportFields = (core.getInput('REPORT_FIELDS') || process.env.REPORT_FIELDS) ? core.getInput('REPORT_FIELDS').split(',') || process.env.REPORT_FIELDS.split(',') : '';
 const startAnalysis = async () => {
   const tasks = [];
   const assessmentVersion = [];
@@ -56,10 +50,13 @@ const startAnalysis = async () => {
     }
   }
 
+  const successfulReportRetrieval = new Map();
   for (const task of tasks) {
     const platform = task.platform.name;
     const taskID = task.platform.latestTaskID;
     const platformIndex = platforms.indexOf(platform.toString());
+
+    successfulReportRetrieval.set(platform, false);
 
     log.info(`Retrieving the version name associated with the ${platform} assessment...`);
     const report = await nowSecure.retrieveAssessmentReport(platform, taskID);
@@ -73,9 +70,10 @@ const startAnalysis = async () => {
       } else {
         // the key for the assessment version changes between different platforms
         assessmentVersion[platformIndex].platform.latestVersion = platform === 'ios' ? report.body.yaap_filtered.result.info[0].file_info.short_bundle_id : report.body.yaap_filtered.result.info[0].file_info.version_name;
+        successfulReportRetrieval.set(platform, true);
+        log.info(`Version name retrieved successfully for platform ${platform}`);
       }
     }
-    log.info('Version name retrieved successfully!');
   }
 
   const resultList = [];
@@ -85,28 +83,31 @@ const startAnalysis = async () => {
 
     log.info(`Retrieving the assessment results for platform ${platform}...`);
 
-    const results = await nowSecure.retrieveAssessmentResults(platform, taskDetails.platform.latestTaskID);
+    if (successfulReportRetrieval.get(platform)) {
+      const results = await nowSecure.retrieveAssessmentResults(platform, taskDetails.platform.latestTaskID);
 
-    if (results.statusCode !== 200) {
-      log.info(`Assessment's results cannot be retrieved for platform ${platform}: ${results.body.message}`);
-      continue;
-    } else {
-      if (!_.isEmpty(results.body)) {
-        // eslint-disable-next-line prefer-const
-        let platformInfusedResults = [];
-
-        results.body.forEach(result => {
-          platformInfusedResults.push(Object.assign(result, { platform: platform }));
-        });
-
-        resultList.push(platformInfusedResults);
-
-        if (results !== null || results !== undefined) {
-          log.info(`The assessment results for platform ${platform} were retrieved successfully!`);
-        }
+      if (results.statusCode !== 200) {
+        log.info(`Assessment's results cannot be retrieved for platform ${platform}: ${results.body.message}`);
+        continue;
       } else {
-        log.info(`The assessment results for platform ${platform} are empty...`);
+        if (!_.isEmpty(results.body)) {
+          // eslint-disable-next-line prefer-const
+          let platformInfusedResults = [];
+          results.body.forEach(result => {
+            platformInfusedResults.push({ ...result, platform: platform });
+          });
+
+          resultList.push(platformInfusedResults);
+
+          if (!results) {
+            log.info(`The assessment results for platform ${platform} were retrieved successfully!`);
+          }
+        } else {
+          log.info(`The assessment results for platform ${platform} are empty...`);
+        }
       }
+    } else {
+      log.info(`The assessment results for platform ${platform} cannot be retrieved since teh relevant report is not available...`);
     }
   }
 

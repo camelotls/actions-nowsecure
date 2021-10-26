@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
+const { LOGGER } = require('../config/config');
 const bunyan = require('bunyan');
-const log = bunyan.createLogger({ name: 'actions-nowsecure' });
+const log = bunyan.createLogger({ name: LOGGER.NAME });
 
 const nowSecure = require('./nowsecure-helpers');
 const utils = require('./utils');
@@ -14,7 +15,7 @@ const getAssessments = async (platforms, extractReport) => {
     const assessment = await nowSecure.retrieveAssessment(platform);
     assessments.push(assessment);
 
-    if (assessment !== null || assessment !== undefined) {
+    if (!assessment) {
       log.info(`The assessment for platform ${platform} was retrieved successfully!`);
     }
   }

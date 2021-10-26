@@ -1,8 +1,9 @@
+const { LOGGER } = require('../config/config');
 const got = require('got');
 const bunyan = require('bunyan');
-const log = bunyan.createLogger({ name: 'actions-nowsecure' });
+const log = bunyan.createLogger({ name: LOGGER.NAME });
 
-const GETRequestWrapper = async (requestName, address, accessToken, apiPath) => {
+const get = async (requestName, address, accessToken, apiPath) => {
   try {
     const response = await got.get(`${address}${apiPath}`, {
       retry: 0,
@@ -21,4 +22,4 @@ const GETRequestWrapper = async (requestName, address, accessToken, apiPath) => 
   }
 };
 
-module.exports = { GETRequestWrapper };
+module.exports = { get };

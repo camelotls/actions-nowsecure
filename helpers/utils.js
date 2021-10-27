@@ -1,5 +1,6 @@
 /* eslint-disable no-undef */
 const { spawnSync } = require('child_process');
+const core = require('@actions/core');
 const assert = require('assert');
 const bunyan = require('bunyan');
 const log = bunyan.createLogger({ name: 'actions-nowsecure' });
@@ -23,4 +24,8 @@ const shellExec = (command) => {
   return cmdOutput;
 };
 
-module.exports = { shellExec };
+const getInput = (name) => {
+  return core.getInput(name) || process.env[name];
+};
+
+module.exports = { shellExec, getInput };

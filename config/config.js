@@ -1,4 +1,4 @@
-const core = require('@actions/core');
+const { getInput } = require('../helpers/utils');
 
 const NOWSECURE = {
   URI: 'https://lab-api.nowsecure.com',
@@ -8,8 +8,8 @@ const NOWSECURE = {
     RESULTS: 'results',
     REPORT: 'report'
   },
-  ACCESS_TOKEN: core.getInput('NOWSECURE_ACCESS_TOKEN') || process.env.NOWSECURE_ACCESS_TOKEN,
-  GROUP_ID: core.getInput('NOWSECURE_GROUP_ID') || process.env.NOWSECURE_GROUP_ID
+  ACCESS_TOKEN: getInput('NOWSECURE_ACCESS_TOKEN'),
+  GROUP_ID: getInput('NOWSECURE_GROUP_ID')
 };
 
 const REST = {
@@ -18,8 +18,8 @@ const REST = {
 
 const APPLICATION = {
   PACKAGES: {
-    IOS: core.getInput('IOS_PACKAGE') || process.env.IOS_PACKAGE,
-    ANDROID: core.getInput('ANDROID_PACKAGE') || process.env.ANDROID_PACKAGE
+    IOS: getInput('IOS_PACKAGE'),
+    ANDROID: getInput('ANDROID_PACKAGE')
   }
 };
 
@@ -27,4 +27,8 @@ const SEVERITIES = {
   LIST: 'high,medium,low,warn,info'
 };
 
-module.exports = { NOWSECURE: NOWSECURE, REST: REST, APPLICATION: APPLICATION, SEVERITIES: SEVERITIES };
+const LOGGER = {
+  NAME: 'actions-nowsecure'
+};
+
+module.exports = { NOWSECURE, REST, APPLICATION, SEVERITIES, LOGGER };

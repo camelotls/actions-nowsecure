@@ -149,7 +149,7 @@ describe('NowSecure REST calls are functioning properly', () => {
         .get(nowSecureEndpoint)
         .replyWithError(mock.MOCK_ERROR_ASSESSMENT_RESULT);
 
-      await rest.GETRequestWrapper('retrieveAssessmentResults', config.NOWSECURE.URI, config.NOWSECURE.ACCESS_TOKEN, nowSecureEndpoint, true)
+      await rest.get('retrieveAssessmentResults', config.NOWSECURE.URI, config.NOWSECURE.ACCESS_TOKEN, nowSecureEndpoint, true)
         .catch(error => expect(error.message).to.be.equal('Assessment not found within user scope'));
     });
   });

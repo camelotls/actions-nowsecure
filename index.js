@@ -94,7 +94,7 @@ const startAnalysis = async () => {
           // eslint-disable-next-line prefer-const
           let platformInfusedResults = [];
           results.body.forEach(result => {
-            platformInfusedResults.push({ ...result, platform: platform });
+            platformInfusedResults.push({ ...result, platform });
           });
 
           resultList.push(platformInfusedResults);

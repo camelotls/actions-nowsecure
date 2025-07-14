@@ -10,13 +10,20 @@ jobs:
       ID: basic
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           path: actions-nowsecure
-      - name: Use Node.js 12.x
-        uses: actions/setup-node@v1
+
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
         with:
-          node-version: 12.x
+          node-version: 20
+
+      - name: Install dependencies
+        run: |
+          cd actions-nowsecure
+          npm install     
+
       - name: Execute Nowsecure action
         id: nowsecure_action
         uses: ./actions-nowsecure/
@@ -26,11 +33,13 @@ jobs:
           IOS_PACKAGE: 'com.saucelabs.SwagLabsMobileApp'
           NOWSECURE_GROUP_ID: ${{ secrets.SAMPLE_NOWSECURE_GROUP_ID }}
           SEVERITY_LIST: 'high,medium,low'
+
       - name: Integration Test Basic Schema
         uses: ./actions-nowsecure/.github/actions/schema-validator
         with:
           MACHINEUSER_GITHUB_TOKEN: ${{ secrets.MACHINEUSER_GITHUB_TOKEN }}
           INPUT_DATA: './nowsecure-report.json'
+
   int-test-extra-fields-schema:
    runs-on: ubuntu-latest
    env:
@@ -40,10 +49,11 @@ jobs:
        uses: actions/checkout@v2
        with:
          path: actions-nowsecure
-     - name: Use Node.js 12.x
-       uses: actions/setup-node@v1
+     - name: Use Node.js 20
+       uses: actions/setup-node@v4
        with:
-         node-version: 12.x
+         node-version: 20
+
      - name: Execute Nowsecure action
        id: nowsecure_action
        uses: ./actions-nowsecure/
@@ -54,6 +64,12 @@ jobs:
          IOS_PACKAGE: 'com.saucelabs.SwagLabsMobileApp'
          NOWSECURE_GROUP_ID: ${{ secrets.SAMPLE_NOWSECURE_GROUP_ID }}
          SEVERITY_LIST: 'high,medium,low'
+
+     - name: Install dependencies
+       run: |
+        cd actions-nowsecure
+        npm install
+
      - name: Integration Test Extra Schema
        uses: ./actions-nowsecure/.github/actions/schema-validator
        with:

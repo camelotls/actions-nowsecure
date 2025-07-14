@@ -1,25 +1,26 @@
 {
   "name": "schema-validator",
   "version": "1.0.0",
-  "description": "Small app to validate the Nowsecure schema",
+  "description": "Small app to validate the NowSecure schema",
   "main": "index.js",
+  "type": "commonjs",
   "scripts": {
-    "test": "test",
-    "lint": "../../../node_modules/.bin/eslint"
-  },
-  "repository": {
-    "type": "git",
-    "url": ""
+    "lint": "eslint . --ext .js"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
-    "@actions/core": "1.4.0",
-    "@actions/github": "4.0.0"
+    "@actions/core": "^1.10.1",
+    "@actions/github": "^5.0.0"
   },
   "devDependencies": {
-    "bunyan": "1.8.15",
+    "bunyan": "^1.8.15",
     "dirty-json": "0.9.2",
-    "jsonschema": "1.4.0"
+    "jsonschema": "1.4.1",
+    "eslint": "^8.57.0",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^6.1.1"
   }
 }

@@ -13,7 +13,7 @@ const platforms = getInput('PLATFORMS').split(',').map(platform => platform.toLo
 const severityList = getInput('SEVERITY_LIST');
 const extractReport = JSON.parse(getInput('EXTRACT_REPORT').toLowerCase());
 const extraReportFields = getInput('REPORT_FIELDS') ? getInput('REPORT_FIELDS').split(',') : '';
-const severityListSplit = (!severityList) ? severityList.split(',').map((item) => item.trim()) : SEVERITIES.LIST.split(',');
+const severityListSplit = severityList ? severityList.split(',').map(item => item.trim()) : SEVERITIES.LIST.split(',').map(item => item.trim());
 
 const startAnalysis = async () => {
   const tasks = [];

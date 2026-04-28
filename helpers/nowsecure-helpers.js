@@ -7,8 +7,9 @@ const retrieveAssessment = async function retrieveAssessment (platform) {
   const appPackage = platform === 'android' ? config.APPLICATION.PACKAGES.ANDROID : config.APPLICATION.PACKAGES.IOS;
   const nowSecureEndpoint = `/${config.NOWSECURE.ENDPOINTS.APPLICATION}/${platform}/${appPackage}/${config.NOWSECURE.ENDPOINTS.ASSESSMENT}/?group=${config.NOWSECURE.GROUP_ID}`;
   const response = await rest.get(retrieveAssessment.name, config.NOWSECURE.URI, config.NOWSECURE.ACCESS_TOKEN, nowSecureEndpoint);
+  const responseMessage = response.body ? response.body.message : response.message;
 
-  assert(response.statusCode === 200, `Assessment cannot be retrieved for platform ${platform}: ${response.body.message}`);
+  assert(response.statusCode === 200, `Assessment cannot be retrieved for platform ${platform}: ${responseMessage}`);
 
   return response.body;
 };

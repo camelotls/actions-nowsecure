@@ -64,7 +64,7 @@ const startAnalysis = async () => {
     if (report.statusCode !== 200) {
       log.info(`Assessment's report cannot be retrieved for platform ${platform}: ${report.body.message}`);
     } else {
-      if (_.isEmpty(report.body.yaap_filtered.result)) {
+      if (_.isEmpty(_.get(report, 'body.yaap_filtered.result'))) {
         log.info(`Assessment is currently running or Assessment's report is Incomplete for platform ${platform}. You may try to re-run the assessment...`);
         continue;
       } else {

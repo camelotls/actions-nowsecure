@@ -92,8 +92,7 @@ describe('NowSecure REST calls are functioning properly', () => {
         .reply(200, mock.MOCK_IOS_ASSESSMENT_REPORT_PER_TASK);
 
       const assessmentResults = await nowSecure.retrieveAssessmentResults('ios', mock.MOCK_IOS_TASK);
-      expect(assessmentResults.body[0]).to.be.instanceOf(Object).to.have.all.keys('yaap_filtered',
-        'yaap',
+      expect(assessmentResults.body[0]).to.be.instanceOf(Object).to.have.all.keys('yaap',
         'static',
         'dynamic');
     });
@@ -103,8 +102,7 @@ describe('NowSecure REST calls are functioning properly', () => {
         .reply(200, mock.MOCK_IOS_ASSESSMENT_REPORT_PER_TASK);
 
       const assessmentResults = await nowSecure.retrieveAssessmentResults('android', mock.MOCK_ANDROID_TASK);
-      expect(assessmentResults.body[0]).to.be.instanceOf(Object).to.have.all.keys('yaap_filtered',
-        'yaap',
+      expect(assessmentResults.body[0]).to.be.instanceOf(Object).to.have.all.keys('yaap',
         'static',
         'dynamic');
     });

@@ -64,12 +64,12 @@ const startAnalysis = async () => {
     if (report.statusCode !== 200) {
       log.info(`Assessment's report cannot be retrieved for platform ${platform}: ${report.body.message}`);
     } else {
-      if (_.isEmpty(_.get(report, 'body.yaap_filtered.result'))) {
+      if (_.isEmpty(_.get(report, 'body.yaap.result.results'))) {
         log.info(`Assessment is currently running or Assessment's report is Incomplete for platform ${platform}. You may try to re-run the assessment...`);
         continue;
       } else {
         // the key for the assessment version changes between different platforms
-        assessmentVersion[platformIndex].platform.latestVersion = platform === 'ios' ? report.body.yaap_filtered.result.info[0].file_info.short_bundle_id : report.body.yaap_filtered.result.info[0].file_info.version_name;
+        assessmentVersion[platformIndex].platform.latestVersion = platform === 'ios' ? report.body.yaap.result.results[0].file_info.short_bundle_id : report.body.yaap.result.results[0].file_info.version_name;
         successfulReportRetrieval.set(platform, true);
         log.info(`Version name retrieved successfully for platform ${platform}`);
       }

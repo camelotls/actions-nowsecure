@@ -32,7 +32,6 @@ const MOCK_ASSESSMENT = [
 
 const MOCK_IOS_ASSESSMENT_REPORT_PER_TASK = [
   {
-    yaap_filtered: {},
     yaap: {},
     static: {},
     dynamic: {}
